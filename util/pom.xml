@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.iyad</groupId>
         <artifactId>BuildCostManger</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>1.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>util</artifactId>
@@ -16,5 +16,4 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
 </project>

@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.iyad</groupId>
 	<artifactId>BuildCostManger</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>BuildCostManger</name>
 	<description>Build cost manger</description>
@@ -24,6 +24,7 @@
 	<modules>
 		<module>core</module>
 		<module>util</module>
+		<module>database</module>
 		<module>ui</module>
 	</modules>
 	<scm>
@@ -35,5 +36,28 @@
 	<properties>
 		<java.version>17</java.version>
 	</properties>
-
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+	</dependencies>
 </project>
