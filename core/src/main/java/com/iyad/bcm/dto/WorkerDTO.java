@@ -13,7 +13,48 @@ import java.util.UUID;
 public class WorkerDTO {
     private UUID id;
     private String name;
-    private String role;
+    private String specialty;
     private LocalDate startedOn;
     private LocalDate endedOn;
+
+
+    public UUID getId() {
+        return this.id;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public String getSpecialty() {
+        return this.specialty;
+    }
+
+    public LocalDate getStartedOn() {
+        return this.startedOn;
+    }
+
+    public LocalDate getEndedOn() {
+        return this.endedOn;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setSpecialty(String specialty) {
+        this.specialty = specialty;
+    }
+
+    public void setStartedOn(LocalDate startedOn) {
+        this.startedOn = startedOn;
+    }
+
+    public void setEndedOn(LocalDate endedOn) {
+        this.endedOn = endedOn;
+    }
 }
