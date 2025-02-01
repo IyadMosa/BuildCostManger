@@ -16,7 +16,7 @@ public abstract class Payment {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     private Double amount;
-    private LocalDate date;
+    private LocalDate paidAt;
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
     @ManyToOne
