@@ -1,5 +1,7 @@
 package com.iyad.model;
 
+import com.iyad.enums.WorkerSpecialty;
+import com.iyad.enums.WorkerType;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -14,7 +16,10 @@ public class Worker {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     private String name;
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private WorkerType type; // PROFESSIONAL, GENERAL
+    @Enumerated(EnumType.STRING)
+    private WorkerSpecialty specialty;
     private LocalDate startedOn;
     private LocalDate endedOn;
     @OneToMany(mappedBy = "worker")

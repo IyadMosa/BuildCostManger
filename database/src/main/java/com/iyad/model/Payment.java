@@ -20,6 +20,11 @@ public abstract class Payment {
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
     @ManyToOne
-    @JoinColumn(name = "worker_id", referencedColumnName = "id")
     private Worker worker;
+
+    @ManyToOne
+    private Material material;
+
+    @ManyToOne
+    private MaterialTransportation transportation;
 }
