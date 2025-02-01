@@ -7,6 +7,7 @@ import com.iyad.repository.WorkerRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -22,12 +23,23 @@ public class WorkerService {
 
     @Transactional
     public void addWorker(WorkerDTO dto) {
+        Optional byName = workerRepository.findByName(dto.getName());
         Worker worker = workerMapper.toEntity(dto);
+        if (byName.isPresent()) {
+            worker.setId(((Worker) byName.get()).getId());
+        }
         workerRepository.save(worker);
     }
 
     public WorkerDTO getWorkerById(UUID id) {
         Worker worker = workerRepository.findById(id).orElse(null);
         return workerMapper.toDTO(worker);
+    }
+
+    public Worker getWorkerByName(String workerName) throws Throwable {
+        Worker worker = (Worker) workerRepository.findByName(workerName)
+                .orElseThrow(() -> new Exception("Worker not found with name: " + workerName));
+        return worker;
+
     }
 }
