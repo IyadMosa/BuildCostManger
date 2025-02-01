@@ -29,4 +29,19 @@ public enum WorkerSpecialty {
     public String getName(String language) {
         return "ar".equalsIgnoreCase(language) ? arabicName : englishName;
     }
+
+    @Override
+    public String toString() {
+        return englishName;
+    }
+
+    public static WorkerSpecialty valueOfLabel(String label) {
+        for (WorkerSpecialty e : values()) {
+            if (e.englishName.equalsIgnoreCase(label) || e.arabicName.equalsIgnoreCase(label)) {
+                return e;
+            }
+        }
+        throw new IllegalArgumentException("No enum constant with label " + label);
+    }
+
 }
