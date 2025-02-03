@@ -19,12 +19,12 @@ public abstract class Payment {
     private LocalDate paidAt;
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "worker_id")
     private Worker worker;
 
-    @ManyToOne
-    private Material material;
-
-    @ManyToOne
-    private MaterialTransportation transportation;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "shop_id")
+    private Shop shop;
 }

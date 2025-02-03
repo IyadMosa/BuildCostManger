@@ -15,10 +15,17 @@ public class Material {
 
     private String name;
 
+    private String description;
+
+    private double price;
+
+    private String unit;
+
     private double quantity;
 
     private double totalCost;
 
-    @OneToMany(mappedBy = "material")
-    private List<Payment> payments;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "shop_id")
+    private Shop shop;
 }
