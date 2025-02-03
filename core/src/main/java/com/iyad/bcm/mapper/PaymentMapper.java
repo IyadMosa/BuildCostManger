@@ -1,5 +1,6 @@
-package com.iyad.bcm.dto;
+package com.iyad.bcm.mapper;
 
+import com.iyad.bcm.dto.PaymentDTO;
 import com.iyad.model.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

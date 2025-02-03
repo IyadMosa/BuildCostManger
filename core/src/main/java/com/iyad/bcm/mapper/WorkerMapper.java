@@ -1,5 +1,6 @@
-package com.iyad.bcm.dto;
+package com.iyad.bcm.mapper;
 
+import com.iyad.bcm.dto.WorkerDTO;
 import com.iyad.enums.WorkerSpecialty;
 import com.iyad.enums.WorkerType;
 import com.iyad.model.Worker;
