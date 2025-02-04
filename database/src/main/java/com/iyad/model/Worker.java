@@ -15,6 +15,7 @@ public class Worker {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
+    @Column(nullable = false, unique = true, updatable = false)
     private String name;
     @Enumerated(EnumType.STRING)
     private WorkerType type; // PROFESSIONAL, GENERAL
