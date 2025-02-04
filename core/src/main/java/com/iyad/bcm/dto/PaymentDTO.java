@@ -2,7 +2,6 @@ package com.iyad.bcm.dto;
 
 import com.iyad.enums.PaymentMethod;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
@@ -29,8 +28,6 @@ public class PaymentDTO {
     //Credit Card
     private String cardHolderName;
     private LocalDate transactionDate;
-    //Worker Name
-    private String workerName;
 
     public UUID getId() {
         return id;
@@ -142,13 +139,5 @@ public class PaymentDTO {
 
     public void setTransactionDate(LocalDate transactionDate) {
         this.transactionDate = transactionDate;
-    }
-
-    public String getWorkerName() {
-        return workerName;
-    }
-
-    public void setWorkerName(String workerName) {
-        this.workerName = workerName;
     }
 }
