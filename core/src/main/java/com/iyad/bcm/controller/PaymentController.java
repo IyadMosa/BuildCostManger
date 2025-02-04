@@ -5,6 +5,7 @@ import com.iyad.bcm.service.PaymentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -18,18 +19,38 @@ public class PaymentController {
         this.paymentService = paymentService;
     }
 
-    @PostMapping
-    public ResponseEntity<String> createPayment(@RequestBody PaymentDTO paymentDTO) throws Throwable {
-        if (paymentDTO.getWorkerName() == null || paymentDTO.getWorkerName().isEmpty()) {
-            return ResponseEntity.badRequest().body("Worker name should not be empty");
-        }
-        paymentService.save(paymentDTO);
-        return ResponseEntity.ok("Payment created successfully");
-    }
-
     @GetMapping("/{paymentId}")
     public ResponseEntity<PaymentDTO> getPayment(@PathVariable UUID paymentId) {
         PaymentDTO paymentDTO = paymentService.getPaymentById(paymentId);
         return ResponseEntity.ok(paymentDTO);
     }
+
+
+    //Shop
+    @PostMapping("/shop/{name}")
+    public ResponseEntity<String> payForShop(@PathVariable String name, @RequestBody PaymentDTO dto) throws Throwable {
+        paymentService.payForShop(name, dto);
+        return ResponseEntity.ok("Payment for shop created successfully");
+    }
+
+    @GetMapping("/shop/{name")
+    public ResponseEntity<List<PaymentDTO>> getPaymentsByShopName(@PathVariable String name) {
+        List<PaymentDTO> dtos = paymentService.getPaymentsByShopName(name);
+        return ResponseEntity.ok(dtos);
+    }
+
+    //Worker
+    @PostMapping("/worker/{name")
+    public ResponseEntity<String> payForWorker(@PathVariable String name, @RequestBody PaymentDTO dto) throws Throwable {
+        paymentService.payForWorker(name, dto);
+        return ResponseEntity.ok("Payment for worker created successfully");
+    }
+
+    @GetMapping("/worker/{name}")
+    public ResponseEntity<List<PaymentDTO>> getPaymentsByWorkerName(@PathVariable String name) {
+        List<PaymentDTO> dtos = paymentService.getPaymentsByWorkerName(name);
+        return ResponseEntity.ok(dtos);
+    }
+
+
 }
