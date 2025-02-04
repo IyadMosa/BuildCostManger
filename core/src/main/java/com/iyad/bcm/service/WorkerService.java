@@ -1,7 +1,7 @@
 package com.iyad.bcm.service;
 
 import com.iyad.bcm.dto.WorkerDTO;
-import com.iyad.bcm.dto.WorkerMapper;
+import com.iyad.bcm.mapper.WorkerMapper;
 import com.iyad.model.Worker;
 import com.iyad.repository.WorkerRepository;
 import org.springframework.stereotype.Service;
