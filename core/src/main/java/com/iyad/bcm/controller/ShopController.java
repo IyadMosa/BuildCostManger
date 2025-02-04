@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/shops")
@@ -15,25 +15,18 @@ import java.util.List;
 public class ShopController {
 
     private final ShopService shopService;
-    private final ShopMapper shopMapper;
+    private final ShopMapper mapper;
 
     @PostMapping
-    public ResponseEntity<String> createShop(@RequestBody ShopDTO shopDTO) {
+    public ResponseEntity<String> createOrUpdateShop(@RequestBody ShopDTO shopDTO) {
         shopService.createOrUpdateShop(shopDTO);
         return ResponseEntity.ok("Shop created successfully");
     }
 
     @GetMapping
-    public ResponseEntity<List<ShopDTO>> getAllShops() {
-        List<ShopDTO> dtos = shopService.getAllShops();
-        return ResponseEntity.ok(dtos);
+    public ResponseEntity<Set<?>> getAllShops(@RequestParam boolean nameOnly) {
+        return ResponseEntity.ok(shopService.getAllShops(nameOnly));
     }
-
-    @GetMapping("/{name}")
-    public ResponseEntity<ShopDTO> getShopByName(@PathVariable String name) throws Throwable {
-        return ResponseEntity.ok(shopService.getShopByName(name));
-    }
-
 
     @DeleteMapping("/{name}")
     public ResponseEntity<Void> deleteShop(@PathVariable String name) throws Throwable {
