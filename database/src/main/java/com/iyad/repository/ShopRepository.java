@@ -11,4 +11,6 @@ import java.util.UUID;
 public interface ShopRepository extends JpaRepository<Shop, UUID> {
 
     Optional findByName(String name);
+
+    int deleteByName(String name);
 }
