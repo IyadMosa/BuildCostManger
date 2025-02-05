@@ -4,8 +4,9 @@ import com.iyad.bcm.dto.ShopDTO;
 import com.iyad.model.Shop;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface ShopMapper {
     @Mapping(target = "name", source = "name")
     @Mapping(target = "shopOwner", source = "shopOwner")

@@ -13,11 +13,15 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/materials")
-@RequiredArgsConstructor
 public class MaterialController {
 
     private final MaterialService materialService;
     private final MaterialMapper materialMapper;
+
+    public MaterialController(MaterialService materialService, MaterialMapper materialMapper) {
+        this.materialService = materialService;
+        this.materialMapper = materialMapper;
+    }
 
     @PostMapping("/shop/{name}")
     public ResponseEntity<String> purchaseMaterial(@PathVariable String name, @RequestBody MaterialDTO materialDTO) throws Throwable {

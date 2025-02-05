@@ -11,11 +11,15 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/api/shops")
-@RequiredArgsConstructor
 public class ShopController {
 
     private final ShopService shopService;
     private final ShopMapper mapper;
+
+    public ShopController(ShopService shopService, ShopMapper mapper) {
+        this.shopService = shopService;
+        this.mapper = mapper;
+    }
 
     @PostMapping
     public ResponseEntity<String> createOrUpdateShop(@RequestBody ShopDTO shopDTO) {

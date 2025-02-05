@@ -14,13 +14,19 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
 public class PaymentService {
 
     private final PaymentMapper paymentMapper;
     private final PaymentRepository paymentRepository;
     private final ShopService shopService;
     private final WorkerService workerService;
+
+    public PaymentService(PaymentMapper paymentMapper, PaymentRepository paymentRepository, ShopService shopService, WorkerService workerService) {
+        this.paymentMapper = paymentMapper;
+        this.paymentRepository = paymentRepository;
+        this.shopService = shopService;
+        this.workerService = workerService;
+    }
 
     private Payment processPayment(PaymentDTO paymentDTO) {
         switch (paymentDTO.getPaymentMethod()) {

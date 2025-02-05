@@ -15,16 +15,20 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class ShopService {
 
     private final ShopRepository shopRepository;
-    private final ShopMapper mapper;
+    private final ShopMapper shopMapper;
+
+    public ShopService(ShopRepository shopRepository, ShopMapper shopMapper) {
+        this.shopRepository = shopRepository;
+        this.shopMapper = shopMapper;
+    }
 
     @Transactional
     public void createOrUpdateShop(ShopDTO dto) {
         Optional byName = shopRepository.findByName(dto.getName());
-        Shop shop = mapper.toEntity(dto);
+        Shop shop = shopMapper.toEntity(dto);
         if (byName.isPresent()) {
             shop.setId(((Worker) byName.get()).getId());
         }
@@ -34,7 +38,7 @@ public class ShopService {
 
     @Transactional(readOnly = true)
     public Set<?> getAllShops(boolean nameOnly) {
-        return nameOnly ? shopRepository.findShopNames() : shopRepository.findAll().stream().map(mapper::toDTO).collect(Collectors.toSet());
+        return nameOnly ? shopRepository.findShopNames() : shopRepository.findAll().stream().map(shopMapper::toDTO).collect(Collectors.toSet());
     }
     @Transactional
     public void deleteShop(String name) {

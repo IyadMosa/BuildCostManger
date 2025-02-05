@@ -5,7 +5,6 @@ import com.iyad.bcm.mapper.MaterialMapper;
 import com.iyad.model.Material;
 import com.iyad.model.Shop;
 import com.iyad.repository.MaterialRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.elasticsearch.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,12 +13,17 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-@RequiredArgsConstructor
 public class MaterialService {
 
     private final MaterialRepository materialRepository;
     private final ShopService shopService;
     private final MaterialMapper materialMapper;
+
+    public MaterialService(MaterialRepository materialRepository, ShopService shopService, MaterialMapper materialMapper) {
+        this.materialRepository = materialRepository;
+        this.shopService = shopService;
+        this.materialMapper = materialMapper;
+    }
 
     @Transactional
     public Material purchaseMaterial(String shopName, MaterialDTO materialDTO) throws Throwable {
