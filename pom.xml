@@ -26,6 +26,7 @@
 		<module>util</module>
 		<module>database</module>
 		<module>ui</module>
+		<module>authentication</module>
 	</modules>
 	<scm>
 		<connection/>
