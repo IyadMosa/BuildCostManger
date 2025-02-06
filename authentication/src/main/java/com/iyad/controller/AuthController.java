@@ -41,7 +41,7 @@ public class AuthController {
             UserDetails userDetails = userService.loadUserByUsername(loginRequest.getUsername());
             String token = tokenProvider.generateToken(userDetails.getUsername());
 
-            return ResponseEntity.ok(new JwtAuthenticationResponse(token));
+            return ResponseEntity.ok(new JwtAuthenticationResponse(true,token));
         } catch (AuthenticationException ex) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponse(false, "Invalid username or password"));
         }
