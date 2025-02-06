@@ -1,13 +1,6 @@
-import { RestRequest } from "./RestRequest";
-import {
-  GET_USER,
-  LOGIN_ERROR,
-  LOGIN_SUCCESS,
-  REGISTER_ERROR,
-  REGISTER_SUCCESS,
-} from "./types";
+import {RestRequest} from "./RestRequest";
+import {GET_USER, LOGIN_ERROR, LOGIN_SUCCESS, REGISTER_ERROR, REGISTER_SUCCESS,} from "./types";
 
-import axios from "axios";
 export const login = (auth, navigate) => async (dispatch, getState) => {
   try {
     const data = await RestRequest("/api/auth/login", "POST", auth)(dispatch, getState);
@@ -23,20 +16,21 @@ export const login = (auth, navigate) => async (dispatch, getState) => {
     dispatch({ type: LOGIN_ERROR, payload: error.message || "Login failed" });
   }
 };
+export const register = (user, navigate) => async (dispatch, getState) => {
+  try {
+    const data = await RestRequest("/api/auth/register", "POST", user)(dispatch, getState);
 
-export const register = (user) => (dispatch, getState) =>
-  RestRequest(
-    "/api/auth/register",
-    "POST",
-    user,
-    "register success"
-  )(dispatch, getState)
-    .then(() => {
-      dispatch({ type: REGISTER_SUCCESS });
-    })
-    .catch((error) => {
-      dispatch({ type: REGISTER_ERROR, payload: error.message });
-    });
+    if (data.success === false) {
+      dispatch({type: REGISTER_ERROR, payload: data.message});
+    } else {
+      localStorage.setItem("token", data.token);
+      dispatch({type: REGISTER_SUCCESS, payload: data.message});
+      navigate("/"); // Navigate after successful login
+    }
+  } catch (error) {
+    dispatch({type: LOGIN_ERROR, payload: error.message || "Login failed"});
+  }
+};
 
 export const whoami = () => (dispatch, getState) =>
   RestRequest(

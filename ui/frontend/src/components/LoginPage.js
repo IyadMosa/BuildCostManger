@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import {login} from "../actions/authAction";
+import React, {useEffect} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {useNavigate} from "react-router-dom";
+import {login, register} from "../actions/authAction";
 import {LoginScreen} from "@iyadmosa/react-library";
 
 const LoginPage = () => {
@@ -18,14 +18,18 @@ const LoginPage = () => {
     }, [loginErrorMsg]); // Effect triggers when loginErrorMsg changes
 
     const handleLogin = (auth) => {
-        console.log("Login:", auth); // Log the login details
         dispatch(login(auth, navigate)); // Dispatch login action
     };
 
+    const handleRegister = (user) => {
+        console.log("Registering:", user); // Log the user object
+        dispatch(register(user, navigate)); // Dispatch register action
+    };
     return (
         <div>
             <LoginScreen
                 onLogin={handleLogin}
+                onRegister={handleRegister}
                 imgPath="https://images.unsplash.com/photo-1542838132-92c53300491e"
                 errorMsg={loginErrorMsg}
             />
