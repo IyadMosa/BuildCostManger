@@ -7,6 +7,7 @@ import com.iyad.repository.WorkerRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -41,5 +42,11 @@ public class WorkerService {
                 .orElseThrow(() -> new Exception("Worker not found with name: " + workerName));
         return worker;
 
+    }
+
+    public List<WorkerDTO> getAllWorkers() {
+        return workerRepository.findAll().stream()
+                .map(workerMapper::toDTO)
+                .toList();
     }
 }
