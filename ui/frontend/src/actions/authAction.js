@@ -1,10 +1,9 @@
 import {RestRequest} from "./RestRequest";
 import {GET_USER, LOGIN_ERROR, LOGIN_SUCCESS, REGISTER_ERROR, REGISTER_SUCCESS,} from "./types";
 
-export const login = (auth, navigate) => async (dispatch, getState) => {
+export const login = (auth, navigate) => async (dispatch) => {
   try {
-    const data = await RestRequest("/api/auth/login", "POST", auth)(dispatch, getState);
-
+    const data = await RestRequest("/api/auth/login", "POST", auth);
     if (data.success === false) {
       dispatch({ type: LOGIN_ERROR, payload: data.message });
     } else {
@@ -16,9 +15,9 @@ export const login = (auth, navigate) => async (dispatch, getState) => {
     dispatch({ type: LOGIN_ERROR, payload: error.message || "Login failed" });
   }
 };
-export const register = (user, navigate) => async (dispatch, getState) => {
+export const register = (user, navigate) => async (dispatch) => {
   try {
-    const data = await RestRequest("/api/auth/register", "POST", user)(dispatch, getState);
+    const data = await RestRequest("/api/auth/register", "POST", user);
 
     if (data.success === false) {
       dispatch({type: REGISTER_ERROR, payload: data.message});
