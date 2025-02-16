@@ -2,14 +2,14 @@ package com.iyad.bcm.service;
 
 import com.iyad.bcm.dto.WorkerDTO;
 import com.iyad.bcm.mapper.WorkerMapper;
+import com.iyad.enums.WorkerSpecialty;
 import com.iyad.model.Worker;
 import com.iyad.repository.WorkerRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class WorkerService {
@@ -48,5 +48,9 @@ public class WorkerService {
         return workerRepository.findAll().stream()
                 .map(workerMapper::toDTO)
                 .toList();
+    }
+
+    public Set<String> getWorkerSpecialities() {
+        return Arrays.stream(WorkerSpecialty.values()).map(specialty -> specialty.getName("en")).collect(Collectors.toSet());
     }
 }

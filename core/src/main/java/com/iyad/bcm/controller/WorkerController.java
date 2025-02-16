@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @RestController
@@ -61,4 +62,18 @@ public class WorkerController {
         WorkerDTO dto = workerService.getWorkerById(id);
         return ResponseEntity.ok(dto);
     }
+
+    @Operation(summary = "Get worker specialties", description = "Retrieves a list of all worker specialties", tags = {"Worker"})
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "List of specialties retrieved successfully"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized - Invalid token", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Forbidden - Expired token", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
+    })
+    @GetMapping("/specialties")
+    public ResponseEntity<Set<String>> getWorkerSpecialties() {
+        Set<String> specialties = workerService.getWorkerSpecialities();
+        return ResponseEntity.ok(specialties);
+    }
+
 }
