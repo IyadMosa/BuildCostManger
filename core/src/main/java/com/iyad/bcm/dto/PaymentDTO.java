@@ -1,5 +1,6 @@
 package com.iyad.bcm.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.iyad.enums.PaymentMethod;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,7 @@ public class PaymentDTO {
     private UUID id;
     private LocalDate paidAt;
     private double amount;
+    @JsonProperty("paymentMethod")
     private PaymentMethod paymentMethod;
     private String bankName;
     private String transactionId;
