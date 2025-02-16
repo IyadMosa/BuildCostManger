@@ -9,3 +9,6 @@ export const GET_USER = "GET_USER";
 export const WORKER = "WORKER";
 export const WORKER_ERROR = "WORKER_ERROR";
 export const WORKER_SPECIALTIES = "WORKER_SPECIALTIES";
+
+//Payments
+export const PAYMENT_ERROR = "PAYMENT_ERROR";
