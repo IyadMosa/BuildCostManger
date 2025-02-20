@@ -1,10 +1,11 @@
 package com.iyad.bcm.service;
 
 import com.iyad.bcm.dto.WorkerDTO;
-import com.iyad.bcm.mapper.WorkerMapper;
 import com.iyad.enums.WorkerSpecialty;
 import com.iyad.model.Worker;
 import com.iyad.repository.WorkerRepository;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,17 +16,16 @@ import java.util.stream.Collectors;
 public class WorkerService {
 
     private final WorkerRepository workerRepository;
-    private final WorkerMapper workerMapper;
+    private final ModelMapper modelMapper;
 
-    public WorkerService(WorkerRepository workerRepository, WorkerMapper workerMapper) {
+    public WorkerService(WorkerRepository workerRepository, ModelMapper modelMapper) {
         this.workerRepository = workerRepository;
-        this.workerMapper = workerMapper;
+        this.modelMapper = modelMapper;
     }
-
     @Transactional
     public void addWorker(WorkerDTO dto) {
         Optional byName = workerRepository.findByName(dto.getName());
-        Worker worker = workerMapper.toEntity(dto);
+        Worker worker = modelMapper.map(dto, Worker.class);
         if (byName.isPresent()) {
             worker.setId(((Worker) byName.get()).getId());
         }
@@ -34,7 +34,7 @@ public class WorkerService {
 
     public WorkerDTO getWorkerById(UUID id) {
         Worker worker = workerRepository.findById(id).orElse(null);
-        return workerMapper.toDTO(worker);
+        return modelMapper.map(worker, WorkerDTO.class);
     }
 
     public Worker getWorkerByName(String workerName) throws Throwable {
@@ -46,7 +46,7 @@ public class WorkerService {
 
     public List<WorkerDTO> getAllWorkers() {
         return workerRepository.findAll().stream()
-                .map(workerMapper::toDTO)
+                .map(worker -> modelMapper.map(worker, WorkerDTO.class))
                 .toList();
     }
 

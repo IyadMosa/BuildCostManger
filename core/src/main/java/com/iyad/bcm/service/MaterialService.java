@@ -1,10 +1,10 @@
 package com.iyad.bcm.service;
 
 import com.iyad.bcm.dto.MaterialDTO;
-import com.iyad.bcm.mapper.MaterialMapper;
 import com.iyad.model.Material;
 import com.iyad.model.Shop;
 import com.iyad.repository.MaterialRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.elasticsearch.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,17 +17,17 @@ public class MaterialService {
 
     private final MaterialRepository materialRepository;
     private final ShopService shopService;
-    private final MaterialMapper materialMapper;
+    private final ModelMapper modelMapper;
 
-    public MaterialService(MaterialRepository materialRepository, ShopService shopService, MaterialMapper materialMapper) {
+    public MaterialService(MaterialRepository materialRepository, ShopService shopService, ModelMapper modelMapper) {
         this.materialRepository = materialRepository;
         this.shopService = shopService;
-        this.materialMapper = materialMapper;
+        this.modelMapper = modelMapper;
     }
 
     @Transactional
     public Material purchaseMaterial(String shopName, MaterialDTO materialDTO) throws Throwable {
-        Material material = materialMapper.toEntity(materialDTO);
+        Material material = modelMapper.map(materialDTO, Material.class);
         Shop shop = getShop(shopName);
         material.setShop(shop);
         return materialRepository.save(material);
@@ -43,14 +43,14 @@ public class MaterialService {
     public MaterialDTO getMaterialById(UUID id) {
         Material material = materialRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Material not found with id: " + id));
-        MaterialDTO dto = materialMapper.toDTO(material);
+        MaterialDTO dto = modelMapper.map(material, MaterialDTO.class);
         return dto;
     }
 
 
     @Transactional
     public Material updateMaterial(String shopName, MaterialDTO updatedMaterial) throws Throwable {
-        Material material = materialMapper.toEntity(updatedMaterial);
+        Material material = modelMapper.map(updatedMaterial, Material.class);
         Shop shop = getShop(shopName);
         material.setShop(shop);
         return materialRepository.save(material);

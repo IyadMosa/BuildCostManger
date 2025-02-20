@@ -3,6 +3,7 @@ package com.iyad.bcm.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.iyad.enums.PaymentMethod;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
@@ -12,24 +13,20 @@ import java.util.UUID;
 @NoArgsConstructor
 public class PaymentDTO {
     private UUID id;
+    private Double amount;
     private LocalDate paidAt;
-    private double amount;
     @JsonProperty("paymentMethod")
     private PaymentMethod paymentMethod;
-    private String bankName;
-    private String transactionId;
-    //Bank Transfer
-    private String bankAccount;
-    private String bankBranch;
-    //Cash
-    private String currency;
-    //Check
-    private String checkNumber;
-    private LocalDate checkDate;
-    private String payeeName;
-    //Credit Card
-    private String cardHolderName;
-    private LocalDate transactionDate;
+    private String currency; // Cash-specific
+    private String checkNumber; // Check-specific
+    private LocalDate checkDate; // Check-specific
+    private String payeeName; // Check-specific
+    private String bankName; // Check-specific and Bank Transfer-specific
+    private String transactionId; // Credit Card-specific and Bank Transfer-specific
+    private String cardHolderName; // Credit Card-specific
+    private LocalDate transactionDate; // Credit Card-specific
+    private String bankAccount; // Bank Transfer-specific
+    private String bankBranch; // Bank Transfer-specific
 
     public UUID getId() {
         return id;
@@ -37,6 +34,14 @@ public class PaymentDTO {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public Double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Double amount) {
+        this.amount = amount;
     }
 
     public LocalDate getPaidAt() {
@@ -47,52 +52,12 @@ public class PaymentDTO {
         this.paidAt = paidAt;
     }
 
-    public double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
-
     public PaymentMethod getPaymentMethod() {
         return paymentMethod;
     }
 
     public void setPaymentMethod(PaymentMethod paymentMethod) {
         this.paymentMethod = paymentMethod;
-    }
-
-    public String getBankName() {
-        return bankName;
-    }
-
-    public void setBankName(String bankName) {
-        this.bankName = bankName;
-    }
-
-    public String getTransactionId() {
-        return transactionId;
-    }
-
-    public void setTransactionId(String transactionId) {
-        this.transactionId = transactionId;
-    }
-
-    public String getBankAccount() {
-        return bankAccount;
-    }
-
-    public void setBankAccount(String bankAccount) {
-        this.bankAccount = bankAccount;
-    }
-
-    public String getBankBranch() {
-        return bankBranch;
-    }
-
-    public void setBankBranch(String bankBranch) {
-        this.bankBranch = bankBranch;
     }
 
     public String getCurrency() {
@@ -127,6 +92,22 @@ public class PaymentDTO {
         this.payeeName = payeeName;
     }
 
+    public String getBankName() {
+        return bankName;
+    }
+
+    public void setBankName(String bankName) {
+        this.bankName = bankName;
+    }
+
+    public String getTransactionId() {
+        return transactionId;
+    }
+
+    public void setTransactionId(String transactionId) {
+        this.transactionId = transactionId;
+    }
+
     public String getCardHolderName() {
         return cardHolderName;
     }
@@ -141,5 +122,21 @@ public class PaymentDTO {
 
     public void setTransactionDate(LocalDate transactionDate) {
         this.transactionDate = transactionDate;
+    }
+
+    public String getBankAccount() {
+        return bankAccount;
+    }
+
+    public void setBankAccount(String bankAccount) {
+        this.bankAccount = bankAccount;
+    }
+
+    public String getBankBranch() {
+        return bankBranch;
+    }
+
+    public void setBankBranch(String bankBranch) {
+        this.bankBranch = bankBranch;
     }
 }

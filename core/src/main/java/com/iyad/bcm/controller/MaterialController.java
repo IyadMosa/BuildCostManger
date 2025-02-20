@@ -1,10 +1,9 @@
 package com.iyad.bcm.controller;
 
 import com.iyad.bcm.dto.MaterialDTO;
-import com.iyad.bcm.mapper.MaterialMapper;
 import com.iyad.bcm.service.MaterialService;
 import com.iyad.model.Material;
-import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,11 +15,11 @@ import java.util.UUID;
 public class MaterialController {
 
     private final MaterialService materialService;
-    private final MaterialMapper materialMapper;
+    private final ModelMapper modelMapper;
 
-    public MaterialController(MaterialService materialService, MaterialMapper materialMapper) {
+    public MaterialController(MaterialService materialService, ModelMapper modelMapper) {
         this.materialService = materialService;
-        this.materialMapper = materialMapper;
+        this.modelMapper = modelMapper;
     }
 
     @PostMapping("/shop/{name}")
@@ -32,13 +31,13 @@ public class MaterialController {
     @PutMapping("/shop/{name}")
     public ResponseEntity<MaterialDTO> updateMaterial(@PathVariable String name, @RequestBody MaterialDTO materialDTO) throws Throwable {
         Material updatedMaterial = materialService.updateMaterial(name, materialDTO);
-        return ResponseEntity.ok(materialMapper.toDTO(updatedMaterial));
+        return ResponseEntity.ok(modelMapper.map(updatedMaterial, MaterialDTO.class));
     }
 
     @GetMapping("/shop/{name}")
     public ResponseEntity<List<MaterialDTO>> getAllMaterials(@PathVariable String name) {
         List<Material> materials = materialService.getAllMaterialsByShop(name);
-        List<MaterialDTO> dtos = materials.stream().map(materialMapper::toDTO).toList();
+        List<MaterialDTO> dtos = materials.stream().map(material -> modelMapper.map(material, MaterialDTO.class)).toList();
         return ResponseEntity.ok(dtos);
     }
 

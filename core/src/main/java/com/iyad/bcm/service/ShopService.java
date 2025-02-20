@@ -1,12 +1,11 @@
 package com.iyad.bcm.service;
 
 import com.iyad.bcm.dto.ShopDTO;
-import com.iyad.bcm.mapper.ShopMapper;
 import com.iyad.exception.ResourceNotFoundException;
 import com.iyad.model.Shop;
 import com.iyad.model.Worker;
 import com.iyad.repository.ShopRepository;
-import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,17 +17,17 @@ import java.util.stream.Collectors;
 public class ShopService {
 
     private final ShopRepository shopRepository;
-    private final ShopMapper shopMapper;
+    private final ModelMapper modelMapper;
 
-    public ShopService(ShopRepository shopRepository, ShopMapper shopMapper) {
+    public ShopService(ShopRepository shopRepository, ModelMapper modelMapper) {
         this.shopRepository = shopRepository;
-        this.shopMapper = shopMapper;
+        this.modelMapper = modelMapper;
     }
 
     @Transactional
     public void createOrUpdateShop(ShopDTO dto) {
         Optional byName = shopRepository.findByName(dto.getName());
-        Shop shop = shopMapper.toEntity(dto);
+        Shop shop = modelMapper.map(dto, Shop.class);
         if (byName.isPresent()) {
             shop.setId(((Worker) byName.get()).getId());
         }
@@ -38,7 +37,7 @@ public class ShopService {
 
     @Transactional(readOnly = true)
     public Set<?> getAllShops(boolean nameOnly) {
-        return nameOnly ? shopRepository.findShopNames() : shopRepository.findAll().stream().map(shopMapper::toDTO).collect(Collectors.toSet());
+        return nameOnly ? shopRepository.findShopNames() : shopRepository.findAll().stream().map(shop -> modelMapper.map(shop, ShopDTO.class)).collect(Collectors.toSet());
     }
     @Transactional
     public void deleteShop(String name) {

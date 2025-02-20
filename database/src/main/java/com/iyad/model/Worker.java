@@ -23,6 +23,8 @@ public class Worker {
     private WorkerSpecialty specialty;
     private LocalDate startedOn;
     private LocalDate endedOn;
+    private double totalMoneyAmountRequested;
+    private double totalMoneyAmountPaid;
     @OneToMany(mappedBy = "worker")
     private List<Payment> payments;
 }

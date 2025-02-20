@@ -1,9 +1,8 @@
 package com.iyad.bcm.controller;
 
 import com.iyad.bcm.dto.ShopDTO;
-import com.iyad.bcm.mapper.ShopMapper;
 import com.iyad.bcm.service.ShopService;
-import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,11 +13,8 @@ import java.util.Set;
 public class ShopController {
 
     private final ShopService shopService;
-    private final ShopMapper mapper;
-
-    public ShopController(ShopService shopService, ShopMapper mapper) {
+    public ShopController(ShopService shopService) {
         this.shopService = shopService;
-        this.mapper = mapper;
     }
 
     @PostMapping
