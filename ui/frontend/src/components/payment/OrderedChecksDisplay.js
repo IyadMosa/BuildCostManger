@@ -6,13 +6,12 @@ const TicketContainer = styled(Box)`
   display: flex;
   overflow-x: auto;
   padding-top: 16px;
-  flex-direction: column; // To allow space for the title
+  flex-direction: column;
 `;
 
 const TicketGroup = styled(Box)`
-  display: flex; // Arrange tickets horizontally within the group
+  display: flex;
   overflow-x: auto;
-  padding-bottom: 16px;
 `;
 
 const Ticket = styled(Paper)`
@@ -20,53 +19,63 @@ const Ticket = styled(Paper)`
   margin-right: 8px;
   width: fit-content;
   min-width: 250px;
-  border: 1px solid #ccc; // Add border to the ticket
-  background-color: ${({ isNext10Days, inFuture }) =>
-    inFuture
-      ? "lightblue"
-      : isNext10Days
-      ? "lightcoral"
-      : "lightgreen"} !important;
+  border: 1px solid #ccc;
+  background-color: ${({ isCurrentMonth, isNextMonth, isPast }) => {
+    if (isPast) {
+      return "lightgreen"; // Green for past
+    } else if (isCurrentMonth) {
+      return "lightcoral"; // Red for current month
+    } else if (isNextMonth) {
+      return "lightblue"; // Blue for next month
+    } else {
+      return "lightgray";
+    }
+  }} !important;
   flex-shrink: 0;
 `;
 
 const OrderedChecksDisplay = ({ orderedChecks }) => {
   const today = new Date();
-  const next10Days = new Date(
-    today.getFullYear(),
-    today.getMonth(),
-    today.getDate() + 10
-  );
+  const currentMonth = today.getMonth();
+  const currentYear = today.getFullYear();
 
   return (
     <TicketContainer>
       <Typography variant="h5" gutterBottom>
-        {" "}
-        {/* Group Title */}
         Checks
       </Typography>
       <TicketGroup>
-        {" "}
-        {/* Tickets container */}
         {orderedChecks.map((check, index) => {
           const checkDateString = check.checkDate;
           const checkDate = checkDateString ? new Date(checkDateString) : null;
-          const isNext10Days =
-            checkDate && checkDate <= next10Days && checkDate >= today;
-          const isPast = checkDate && checkDate < today;
+
+          if (!checkDate) {
+            return null;
+          }
+
+          const checkMonth = checkDate.getMonth();
+          const checkYear = checkDate.getFullYear();
+
+          const isCurrentMonth =
+            checkYear === currentYear && checkMonth === currentMonth;
+          const isNextMonth =
+            (checkYear === currentYear && checkMonth === currentMonth + 1) ||
+            (checkYear === currentYear + 1 && checkMonth === 0);
+          const isPast = checkDate < today; // Check if the date is in the past
 
           return (
             <Ticket
               key={index}
-              isNext10Days={isNext10Days && !isPast}
-              inFuture={!isNext10Days && !isPast}
+              isCurrentMonth={isCurrentMonth}
+              isNextMonth={isNextMonth}
+              isPast={isPast} // Pass the isPast prop
             >
               <Typography variant="h6" noWrap>
                 Check #{check.checkNumber || "N/A"}
               </Typography>
               <Typography>Amount: {check.amount || "N/A"}</Typography>
               <Typography>
-                Check Date: {checkDate?.toLocaleDateString() || "N/A"}
+                Check Date: {checkDate?.toLocaleDateString("en-GB") || "N/A"}
               </Typography>
               <Typography>Owner: {check.payeeName || "N/A"}</Typography>
             </Ticket>
