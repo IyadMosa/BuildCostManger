@@ -7,8 +7,11 @@ export const GET_USER = "GET_USER";
 
 //Workers
 export const WORKER = "WORKER";
+export const WORKERS = "WORKERS";
 export const WORKER_ERROR = "WORKER_ERROR";
 export const WORKER_SPECIALTIES = "WORKER_SPECIALTIES";
-
 //Payments
+
 export const PAYMENT_ERROR = "PAYMENT_ERROR";
+export const WORKER_PAYMENTS = "WORKER_PAYMENTS";
+export const PAYMENT_DETAILS = "PAYMENT_DETAILS";

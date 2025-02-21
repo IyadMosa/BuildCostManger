@@ -7,29 +7,41 @@ import {
 } from "../../actions/workerAction";
 import { LoadingSpinner, Modal, TableScreen } from "@iyadmosa/react-library";
 import AddWorkerForm from "./AddWorkerForm";
-import { FaDollarSign } from "react-icons/fa";
+import { FaDollarSign, FaFileInvoiceDollar } from "react-icons/fa";
 import PaymentForm from "../payment/PaymentForm";
 import { payForWorker } from "../../actions/paymentAction";
+import { useNavigate } from "react-router-dom";
 
 const Workers = () => {
+  const navigate = useNavigate();
   const [worker, setWorker] = useState({
     id: "",
     name: "",
     specialty: "",
     startedOn: "",
     endedOn: "",
+    totalMoneyAmountRequested: "",
   });
   const [paymentData, setPaymentData] = useState({
     paidAt: new Date(),
     amount: null,
-    paymentMethod: "CASH",
+    paymentMethod: null,
     currency: "NIS",
+    bankName: null,
+    transactionId: null,
+    bankAccount: null,
+    bankBranch: null,
+    checkNumber: null,
+    checkDate: null,
+    payeeName: null,
+    cardHolderName: null,
+    transactionDate: null,
   });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [workerName, setWorkerName] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  const [isEditing, setIsEditing] = useState(false);
   const dispatch = useDispatch();
   const workers = useSelector((state) => state.workerTable.workers) || [];
   const specialties =
@@ -46,12 +58,24 @@ const Workers = () => {
     fetchData();
   }, [dispatch]);
 
+  const handleGetBillsClick = useCallback(
+    (name) => {
+      navigate(`/worker-bills/${encodeURIComponent(name)}`); // Redirect to new page with worker name in URL
+    },
+    [navigate]
+  );
+
   const columns = useMemo(
     () => [
-      { id: "id", Header: "ID", accessor: "id" },
       { id: "name", Header: "Name", accessor: "name" },
       { id: "specialty", Header: "Specialty", accessor: "specialty" },
       { id: "startedOn", Header: "Started On", accessor: "startedOn" },
+      {
+        id: "requested",
+        Header: "Requested",
+        accessor: "totalMoneyAmountRequested",
+      },
+      { id: "paid", Header: "Paid", accessor: "totalMoneyAmountPaid" },
       { id: "endedOn", Header: "Ended On", accessor: "endedOn" },
       {
         Header: "",
@@ -59,12 +83,20 @@ const Workers = () => {
         sortable: false,
         resizable: false,
         Cell: (row) => (
-          <button
-            onClick={() => handlePaymentClick(row.original.name)}
-            style={{ background: "none", border: "none", cursor: "pointer" }}
-          >
-            <FaDollarSign size={20} />
-          </button>
+          <div style={{ display: "flex", gap: "10px" }}>
+            <button
+              onClick={() => handlePaymentClick(row.original.name)}
+              style={{ background: "none", border: "none", cursor: "pointer" }}
+            >
+              <FaDollarSign size={20} />
+            </button>
+            <button
+              onClick={() => handleGetBillsClick(row.original.name)}
+              style={{ background: "none", border: "none", cursor: "pointer" }}
+            >
+              <FaFileInvoiceDollar size={20} />
+            </button>
+          </div>
         ),
       },
     ],
@@ -86,8 +118,6 @@ const Workers = () => {
 
   if (loading) return <LoadingSpinner />;
 
-  console.log(`Pay to worker ${workerName}, paymentData`, paymentData);
-
   return (
     <div>
       <TableScreen
@@ -105,6 +135,7 @@ const Workers = () => {
             worker={worker}
             onChange={setWorker}
             specialties={specialties}
+            isEdit={isEditing}
           />
         }
       />

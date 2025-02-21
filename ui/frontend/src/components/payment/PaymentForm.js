@@ -10,14 +10,16 @@ import {
   Select,
   TextField,
 } from "@mui/material";
+import { AmountSelector } from "@iyadmosa/react-library";
 
-const PaymentForm = ({ paymentData = {}, onChange }) => {
+const PaymentForm = ({ paymentData = {}, onChange, disabled = false }) => {
   const paymentMethods = [
-    "BANK TRANSFER",
-    "CASH",
-    "CHECK",
-    "CREDIT CARD",
+    "Bank Transfer",
+    "Cash",
+    "Check",
+    "Credit Card",
   ].map((method) => method.toUpperCase());
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     onChange((prevData) => ({
@@ -26,12 +28,8 @@ const PaymentForm = ({ paymentData = {}, onChange }) => {
     }));
   };
 
-  const handleAmountChange = (e) => {
-    const value = e.target.value.replace(/[^0-9.]/g, "");
-    onChange((prevData) => ({
-      ...prevData,
-      amount: value,
-    }));
+  const handleDateChange = (name, date) => {
+    onChange((prevData) => ({ ...prevData, [name]: date }));
   };
 
   return (
@@ -39,27 +37,30 @@ const PaymentForm = ({ paymentData = {}, onChange }) => {
       <form>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
+            <AmountSelector
+              label="Amount"
+              name="amount"
+              amount={paymentData.amount}
+              onChange={(value) =>
+                onChange((prevData) => ({ ...prevData, amount: value }))
+              }
+              fullWidth
+              required
+              disabled={disabled}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
                 label="Paid At"
                 value={paymentData.paidAt}
-                onChange={(date) => onChange({ ...paymentData, paidAt: date })}
+                onChange={(date) => handleDateChange("paidAt", date)} // Use consistent date handling
                 renderInput={(params) => (
                   <TextField {...params} fullWidth required />
                 )}
+                disabled={disabled}
               />
             </LocalizationProvider>
-          </Grid>
-
-          <Grid item xs={12} sm={6}>
-            <TextField
-              label="Amount"
-              name="amount"
-              value={paymentData.amount}
-              onChange={handleAmountChange}
-              fullWidth
-              required
-            />
           </Grid>
 
           <Grid item xs={12}>
@@ -67,8 +68,9 @@ const PaymentForm = ({ paymentData = {}, onChange }) => {
               <InputLabel>Payment Method</InputLabel>
               <Select
                 name="paymentMethod"
-                value={paymentData.paymentMethod}
+                value={paymentData.paymentMethod?.toUpperCase()}
                 onChange={handleChange}
+                disabled={disabled}
               >
                 {paymentMethods.map((method, index) => (
                   <MenuItem
@@ -87,159 +89,133 @@ const PaymentForm = ({ paymentData = {}, onChange }) => {
             </FormControl>
           </Grid>
 
-          {paymentData.paymentMethod === "BANK TRANSFER" && (
-            <>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Bank Name"
-                  name="bankName"
-                  value={paymentData.bankName}
-                  onChange={handleChange}
-                  fullWidth
-                  required
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Transaction ID"
-                  name="transactionId"
-                  value={paymentData.transactionId}
-                  onChange={handleChange}
-                  fullWidth
-                  required
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Bank Account"
-                  name="bankAccount"
-                  value={paymentData.bankAccount}
-                  onChange={handleChange}
-                  fullWidth
-                  required
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Bank Branch"
-                  name="bankBranch"
-                  value={paymentData.bankBranch}
-                  onChange={handleChange}
-                  fullWidth
-                  required
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    label="Transaction Date"
-                    value={paymentData.transactionDate}
-                    onChange={(date) =>
-                      onChange({ ...paymentData, transactionDate: date })
-                    }
-                    renderInput={(params) => (
-                      <TextField {...params} fullWidth required />
-                    )}
-                  />
-                </LocalizationProvider>
-              </Grid>
-            </>
-          )}
-
-          {paymentData.paymentMethod === "CASH" && (
-            <Grid item xs={12}>
-              <FormControl fullWidth required>
-                <InputLabel>Currency</InputLabel>
-                <Select
-                  name="currency"
-                  value={paymentData.currency}
-                  onChange={handleChange}
-                >
-                  {["NIS", "Dollar", "Euro"].map((method, index) => (
-                    <MenuItem
-                      key={index}
-                      value={method === "Select Payment Method" ? "" : method}
-                      style={{
-                        display: "block",
-                        whiteSpace: "normal",
-                        paddingLeft: "10px",
-                      }}
-                    >
-                      {method}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-          )}
-
-          {paymentData.paymentMethod === "CHECK" && (
-            <>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="CHECK Number"
-                  name="checkNumber"
-                  value={paymentData.checkNumber}
-                  onChange={handleChange}
-                  fullWidth
-                  required
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Payee Name"
-                  name="payeeName"
-                  value={paymentData.payeeName}
-                  onChange={handleChange}
-                  fullWidth
-                  required
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    label="CHECK Date"
-                    value={paymentData.checkDate}
-                    onChange={(date) =>
-                      onChange({ ...paymentData, checkDate: date })
-                    }
-                    renderInput={(params) => (
-                      <TextField {...params} fullWidth required />
-                    )}
-                  />
-                </LocalizationProvider>
-              </Grid>
-            </>
-          )}
-
-          {paymentData.paymentMethod === "CREDIT CARD" && (
-            <>
-              <Grid item xs={12}>
-                <TextField
-                  label="Card Holder Name"
-                  name="cardHolderName"
-                  value={paymentData.cardHolderName}
-                  onChange={handleChange}
-                  fullWidth
-                  required
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    label="Transaction Date"
-                    value={paymentData.transactionDate}
-                    onChange={(date) =>
-                      onChange({ ...paymentData, transactionDate: date })
-                    }
-                    renderInput={(params) => (
-                      <TextField {...params} fullWidth required />
-                    )}
-                  />
-                </LocalizationProvider>
-              </Grid>
-            </>
-          )}
+          {/* Conditional Rendering - Refactored for clarity and conciseness */}
+          {["BANK TRANSFER", "CASH", "CHECK", "CREDIT CARD"].map((method) => {
+            if (paymentData.paymentMethod === method) {
+              return (
+                <React.Fragment key={method}>
+                  {" "}
+                  {/* Key for Fragment */}
+                  {method === "BANK TRANSFER" && (
+                    <>
+                      {[
+                        "Bank Name",
+                        "Transaction ID",
+                        "Bank Account",
+                        "Bank Branch",
+                      ].map((field) => (
+                        <Grid item xs={12} sm={6} key={field}>
+                          <TextField
+                            label={field}
+                            name={field.toLowerCase().replace(" ", "")}
+                            value={
+                              paymentData[field.toLowerCase().replace(" ", "")]
+                            }
+                            onChange={handleChange}
+                            fullWidth
+                            required
+                          />
+                        </Grid>
+                      ))}
+                      <Grid item xs={12}>
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <DatePicker
+                            label="Transaction Date"
+                            value={paymentData.transactionDate}
+                            onChange={(date) =>
+                              handleDateChange("transactionDate", date)
+                            }
+                            renderInput={(params) => (
+                              <TextField {...params} fullWidth required />
+                            )}
+                          />
+                        </LocalizationProvider>
+                      </Grid>
+                    </>
+                  )}
+                  {method === "CASH" && (
+                    <Grid item xs={12}>
+                      <FormControl fullWidth required>
+                        <InputLabel>Currency</InputLabel>
+                        <Select
+                          name="currency"
+                          value={paymentData.currency}
+                          onChange={handleChange}
+                        >
+                          {["NIS", "Dollar", "Euro"].map((currency) => (
+                            <MenuItem key={currency} value={currency}>
+                              {currency}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </Grid>
+                  )}
+                  {method === "CHECK" && (
+                    <>
+                      {["CHECK Number", "Payee Name"].map((field) => (
+                        <Grid item xs={12} sm={6} key={field}>
+                          <TextField
+                            label={field}
+                            name={field.toLowerCase().replace(" ", "")}
+                            value={
+                              paymentData[field.toLowerCase().replace(" ", "")]
+                            }
+                            onChange={handleChange}
+                            fullWidth
+                            required
+                          />
+                        </Grid>
+                      ))}
+                      <Grid item xs={12}>
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <DatePicker
+                            label="CHECK Date"
+                            value={paymentData.checkDate}
+                            onChange={(date) =>
+                              handleDateChange("checkDate", date)
+                            }
+                            renderInput={(params) => (
+                              <TextField {...params} fullWidth required />
+                            )}
+                          />
+                        </LocalizationProvider>
+                      </Grid>
+                    </>
+                  )}
+                  {method === "CREDIT CARD" && (
+                    <>
+                      <Grid item xs={12}>
+                        <TextField
+                          label="Card Holder Name"
+                          name="cardHolderName"
+                          value={paymentData.cardHolderName}
+                          onChange={handleChange}
+                          fullWidth
+                          required
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <DatePicker
+                            label="Transaction Date"
+                            value={paymentData.transactionDate}
+                            onChange={(date) =>
+                              handleDateChange("transactionDate", date)
+                            }
+                            renderInput={(params) => (
+                              <TextField {...params} fullWidth required />
+                            )}
+                          />
+                        </LocalizationProvider>
+                      </Grid>
+                    </>
+                  )}
+                </React.Fragment>
+              );
+            }
+            return null;
+          })}
         </Grid>
       </form>
     </Paper>
