@@ -55,13 +55,14 @@ const AddWorkerForm = ({ worker, onChange, specialties, isEdit, disabled }) => {
                 value={worker.specialty}
                 onChange={(e) => handleChange("specialty", e.target.value)}
                 displayEmpty
-                disabled={disabled}
+                disabled={isEdit || disabled}
                 MenuProps={{
                   PaperProps: {
                     style: {
                       maxHeight: 300, // Ensure proper scrolling
                       overflowY: "auto",
                       whiteSpace: "normal", // Ensures options wrap properly
+                      paddingLeft: "15px",
                     },
                   },
                 }}
@@ -98,7 +99,7 @@ const AddWorkerForm = ({ worker, onChange, specialties, isEdit, disabled }) => {
               renderInput={(params) => (
                 <TextField {...params} fullWidth required />
               )}
-              disabled={disabled}
+              disabled={isEdit || disabled}
             />
           </Grid>
 

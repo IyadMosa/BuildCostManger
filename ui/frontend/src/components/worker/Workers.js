@@ -3,11 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addWorker,
   getAllWorkers,
+  getWorker,
   getWorkerSpecialties,
 } from "../../actions/workerAction";
 import { LoadingSpinner, Modal, TableScreen } from "@iyadmosa/react-library";
 import AddWorkerForm from "./AddWorkerForm";
-import { FaDollarSign, FaFileInvoiceDollar } from "react-icons/fa";
+import { FaDollarSign, FaFileInvoiceDollar, FaUserEdit } from "react-icons/fa";
 import PaymentForm from "../payment/PaymentForm";
 import { payForWorker } from "../../actions/paymentAction";
 import { useNavigate } from "react-router-dom";
@@ -39,6 +40,7 @@ const Workers = () => {
   });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isWorkerModalOpen, setIsWorkerModalOpen] = useState(false);
   const [workerName, setWorkerName] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
@@ -46,7 +48,7 @@ const Workers = () => {
   const workers = useSelector((state) => state.workerTable.workers) || [];
   const specialties =
     useSelector((state) => state.workerTable.specialties) || [];
-
+  console.log(workers);
   useEffect(() => {
     const fetchData = async () => {
       await Promise.all([
@@ -85,6 +87,12 @@ const Workers = () => {
         Cell: (row) => (
           <div style={{ display: "flex", gap: "10px" }}>
             <button
+              onClick={() => handleEditWorker(row.original.name)}
+              style={{ background: "none", border: "none", cursor: "pointer" }}
+            >
+              <FaUserEdit size={20} />
+            </button>
+            <button
               onClick={() => handlePaymentClick(row.original.name)}
               style={{ background: "none", border: "none", cursor: "pointer" }}
             >
@@ -107,6 +115,28 @@ const Workers = () => {
     setWorkerName(name);
     setIsModalOpen(true);
   }, []);
+
+  const workerToEdit = useSelector((state) => state.workerTable.worker) || {};
+
+  const handleEditWorker = useCallback(
+    (name) => {
+      setWorkerName(name); // You can keep this to update the state
+      setIsWorkerModalOpen(true);
+      setIsEditing(true);
+      setWorker(workerToEdit);
+      dispatch(getWorker(name));
+    },
+    [dispatch]
+  );
+
+  const handleSubmitEditedWorker = async () => {
+    if (worker) {
+      await dispatch(addWorker(worker));
+      setWorker(null);
+      setIsWorkerModalOpen(false);
+      setIsEditing(false);
+    }
+  };
 
   const handleSubmitPayment = async () => {
     if (workerName) {
@@ -150,6 +180,23 @@ const Workers = () => {
         }}
       >
         <PaymentForm paymentData={paymentData} onChange={setPaymentData} />
+      </Modal>
+      <Modal
+        title="Payment Modal"
+        isOpen={isWorkerModalOpen}
+        onSubmit={handleSubmitEditedWorker}
+        onClose={() => {
+          setIsWorkerModalOpen(false);
+          setWorkerName(null);
+          setWorker(null);
+        }}
+      >
+        <AddWorkerForm
+          worker={worker}
+          onChange={setWorker}
+          specialties={specialties}
+          isEdit={isEditing}
+        />
       </Modal>
     </div>
   );
