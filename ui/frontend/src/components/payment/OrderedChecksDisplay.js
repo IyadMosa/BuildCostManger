@@ -19,6 +19,7 @@ const Ticket = styled(Paper)`
   padding: 16px;
   margin-right: 8px;
   width: fit-content;
+  min-width: 250px;
   border: 1px solid #ccc; // Add border to the ticket
   background-color: ${({ isNext10Days, inFuture }) =>
     inFuture
@@ -65,8 +66,9 @@ const OrderedChecksDisplay = ({ orderedChecks }) => {
               </Typography>
               <Typography>Amount: {check.amount || "N/A"}</Typography>
               <Typography>
-                Date: {checkDate?.toLocaleDateString() || "N/A"}
+                Check Date: {checkDate?.toLocaleDateString() || "N/A"}
               </Typography>
+              <Typography>Owner: {check.payeeName || "N/A"}</Typography>
             </Ticket>
           );
         })}
