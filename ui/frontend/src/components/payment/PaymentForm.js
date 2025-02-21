@@ -32,6 +32,15 @@ const PaymentForm = ({ paymentData = {}, onChange, disabled = false }) => {
     onChange((prevData) => ({ ...prevData, [name]: date }));
   };
 
+  function toCamelCase(phrase) {
+    return phrase
+      .toLowerCase() // Convert to lowercase
+      .replace(/(?:^\w|[A-Z]|\b\w)/g, function (letter, index) {
+        return index === 0 ? letter.toLowerCase() : letter.toUpperCase(); // Capitalize first letter of each word except the first
+      })
+      .replace(/\s+/g, ""); // Remove all spaces
+  }
+
   return (
     <Paper elevation={3} sx={{ padding: 3, borderRadius: 2 }}>
       <form>
@@ -91,7 +100,7 @@ const PaymentForm = ({ paymentData = {}, onChange, disabled = false }) => {
 
           {/* Conditional Rendering - Refactored for clarity and conciseness */}
           {["BANK TRANSFER", "CASH", "CHECK", "CREDIT CARD"].map((method) => {
-            if (paymentData.paymentMethod === method) {
+            if (paymentData.paymentMethod?.toUpperCase() === method) {
               return (
                 <React.Fragment key={method}>
                   {" "}
@@ -107,13 +116,12 @@ const PaymentForm = ({ paymentData = {}, onChange, disabled = false }) => {
                         <Grid item xs={12} sm={6} key={field}>
                           <TextField
                             label={field}
-                            name={field.toLowerCase().replace(" ", "")}
-                            value={
-                              paymentData[field.toLowerCase().replace(" ", "")]
-                            }
+                            name={toCamelCase(field)}
+                            value={paymentData[toCamelCase(field)]}
                             onChange={handleChange}
                             fullWidth
                             required
+                            disabled={disabled}
                           />
                         </Grid>
                       ))}
@@ -128,6 +136,7 @@ const PaymentForm = ({ paymentData = {}, onChange, disabled = false }) => {
                             renderInput={(params) => (
                               <TextField {...params} fullWidth required />
                             )}
+                            disabled={disabled}
                           />
                         </LocalizationProvider>
                       </Grid>
@@ -141,6 +150,7 @@ const PaymentForm = ({ paymentData = {}, onChange, disabled = false }) => {
                           name="currency"
                           value={paymentData.currency}
                           onChange={handleChange}
+                          disabled={disabled}
                         >
                           {["NIS", "Dollar", "Euro"].map((currency) => (
                             <MenuItem key={currency} value={currency}>
@@ -153,17 +163,16 @@ const PaymentForm = ({ paymentData = {}, onChange, disabled = false }) => {
                   )}
                   {method === "CHECK" && (
                     <>
-                      {["CHECK Number", "Payee Name"].map((field) => (
+                      {["Check Number", "Payee Name"].map((field) => (
                         <Grid item xs={12} sm={6} key={field}>
                           <TextField
                             label={field}
-                            name={field.toLowerCase().replace(" ", "")}
-                            value={
-                              paymentData[field.toLowerCase().replace(" ", "")]
-                            }
+                            name={toCamelCase(field)}
+                            value={paymentData[toCamelCase(field)]}
                             onChange={handleChange}
                             fullWidth
                             required
+                            disabled={disabled}
                           />
                         </Grid>
                       ))}
@@ -178,6 +187,7 @@ const PaymentForm = ({ paymentData = {}, onChange, disabled = false }) => {
                             renderInput={(params) => (
                               <TextField {...params} fullWidth required />
                             )}
+                            disabled={disabled}
                           />
                         </LocalizationProvider>
                       </Grid>
@@ -193,6 +203,7 @@ const PaymentForm = ({ paymentData = {}, onChange, disabled = false }) => {
                           onChange={handleChange}
                           fullWidth
                           required
+                          disabled={disabled}
                         />
                       </Grid>
                       <Grid item xs={12}>
@@ -206,6 +217,7 @@ const PaymentForm = ({ paymentData = {}, onChange, disabled = false }) => {
                             renderInput={(params) => (
                               <TextField {...params} fullWidth required />
                             )}
+                            disabled={disabled}
                           />
                         </LocalizationProvider>
                       </Grid>

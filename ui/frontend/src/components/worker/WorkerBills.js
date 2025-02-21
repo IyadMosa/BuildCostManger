@@ -15,6 +15,7 @@ import {
 import PaymentForm from "../payment/PaymentForm";
 import { FaInfoCircle } from "react-icons/fa";
 import { getWorker } from "../../actions/workerAction";
+import OrderedChecksDisplay from "../payment/OrderedChecksDisplay";
 
 const defaultPaymentData = {
   paidAt: new Date(),
@@ -111,8 +112,36 @@ const WorkerBills = () => {
     [handlePaymentInfoClick]
   );
 
+  const getOrderedChecksImproved = (payments) => {
+    if (!Array.isArray(payments)) {
+      throw new Error("Input must be an array of payments.");
+    }
+
+    const checks = payments.filter(
+      (payment) => payment.paymentMethod.toUpperCase() === "CHECK"
+    );
+
+    // Create a new array with the sorted checks to avoid mutating the original array.
+    const sortedChecks = [...checks].sort((a, b) => {
+      const dateA = a.checkDate ? new Date(a.checkDate) : null;
+      const dateB = b.checkDate ? new Date(b.checkDate) : null;
+
+      if (dateA === null && dateB === null) return 0; // Both null, maintain order
+      if (dateA === null) return -1; // a is null, put it first
+      if (dateB === null) return 1; // b is null, put it first
+
+      return dateA - dateB; // Compare valid dates
+    });
+
+    return sortedChecks;
+  };
+
+  const orderedChecks = useMemo(() => {
+    return getOrderedChecksImproved(payments); // Call the improved function
+  }, [payments]);
+
   if (loading) return <LoadingSpinner />;
-  console.log(worker);
+
   return (
     <div>
       <TotalPaid
@@ -120,6 +149,7 @@ const WorkerBills = () => {
         totalRequested={worker.totalMoneyAmountRequested}
         name={name}
       />
+      <OrderedChecksDisplay orderedChecks={orderedChecks} />
       <TableScreen
         title=""
         onInit={async () => {

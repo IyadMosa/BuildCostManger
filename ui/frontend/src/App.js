@@ -19,7 +19,7 @@ import store from "./store";
 import LoginPage from "./components/LoginPage";
 import Dashboard from "./components/Dashboard";
 import Workers from "./components/worker/Workers.js";
-import WorkerBills from "./components/worker/WorkerBills ";
+import WorkerBills from "./components/worker/WorkerBills";
 
 // Private Route Component
 const PrivateRoute = ({ children }) => {
