@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Paper, Typography } from "@mui/material";
+import { Box, LinearProgress, Paper, Typography } from "@mui/material";
 import styled from "styled-components";
 
 const TicketContainer = styled(Box)`
@@ -39,11 +39,58 @@ const OrderedChecksDisplay = ({ orderedChecks }) => {
   const currentMonth = today.getMonth();
   const currentYear = today.getFullYear();
 
+  // Calculate progress
+  const totalAmount = orderedChecks.reduce(
+    (sum, check) => sum + (check.amount || 0),
+    0
+  );
+  const passedAmount = orderedChecks.reduce((sum, check) => {
+    const checkDateString = check.checkDate;
+    const checkDate = checkDateString ? new Date(checkDateString) : null;
+    const isPast = checkDate && checkDate < today;
+    return isPast ? sum + (check.amount || 0) : sum;
+  }, 0);
+  const progressPercentage =
+    totalAmount === 0 ? 0 : (passedAmount / totalAmount) * 100;
+
   return (
     <TicketContainer>
-      <Typography variant="h5" gutterBottom>
-        Checks
-      </Typography>
+      <Box display="flex" alignItems="center" gap={2}>
+        {" "}
+        {/* Use gap for spacing */}
+        <Typography variant="h5" fontWeight="medium">
+          {" "}
+          {/* Slightly bolder font weight */}
+          Checks:
+        </Typography>
+        <LinearProgress
+          variant="determinate"
+          value={progressPercentage}
+          sx={{
+            width: "300px",
+            height: "15px",
+            borderRadius: "8px", // More rounded corners
+            backgroundColor: "#e0e0e0", // Subtle track color
+            "& .MuiLinearProgress-bar": {
+              backgroundColor:
+                progressPercentage < 100
+                  ? progressPercentage < 50
+                    ? "#ff9800" // More vibrant orange
+                    : "#4caf50" // Material Design green
+                  : "#4caf50",
+              borderRadius: "8px", // Match rounded corners of the track
+            },
+          }}
+        />
+        <Typography variant="body2" color="text.secondary">
+          {" "}
+          {/* Use color from theme */}
+          {progressPercentage.toFixed(0)}%
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          {passedAmount} / {totalAmount}
+        </Typography>
+      </Box>
       <TicketGroup>
         {orderedChecks.map((check, index) => {
           const checkDateString = check.checkDate;
