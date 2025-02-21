@@ -2,24 +2,27 @@ package com.iyad.bcm.controller;
 
 import com.iyad.bcm.dto.WorkerDTO;
 import com.iyad.bcm.service.WorkerService;
+import com.iyad.model.Worker;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/workers")
 public class WorkerController {
     private final WorkerService workerService;
+    private final ModelMapper modelMapper;
 
-    public WorkerController(WorkerService workerService) {
+    public WorkerController(WorkerService workerService, ModelMapper modelMapper) {
         this.workerService = workerService;
+        this.modelMapper = modelMapper;
     }
 
     @Operation(summary = "Create a new worker", description = "Adds a new worker to the system", tags = {"Worker"})
@@ -57,10 +60,11 @@ public class WorkerController {
             @ApiResponse(responseCode = "404", description = "Worker not found", content = @Content),
             @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
     })
-    @GetMapping("/{id}")
-    public ResponseEntity<WorkerDTO> getWorker(@PathVariable UUID id) {
-        WorkerDTO dto = workerService.getWorkerById(id);
-        return ResponseEntity.ok(dto);
+    @GetMapping("/{name}")
+    public ResponseEntity<WorkerDTO> getWorker(@PathVariable String name) throws Throwable {
+        Worker worker = workerService.getWorkerByName(name);
+
+        return ResponseEntity.ok(modelMapper.map(worker, WorkerDTO.class));
     }
 
     @Operation(summary = "Get worker specialties", description = "Retrieves a list of all worker specialties", tags = {"Worker"})
