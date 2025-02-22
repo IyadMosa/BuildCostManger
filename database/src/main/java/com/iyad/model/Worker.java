@@ -21,6 +21,7 @@ public class Worker {
     private WorkerType type; // PROFESSIONAL, GENERAL
     @Enumerated(EnumType.STRING)
     private WorkerSpecialty specialty;
+    private String phoneNumber;
     private LocalDate startedOn;
     private LocalDate endedOn;
     private double totalMoneyAmountRequested;

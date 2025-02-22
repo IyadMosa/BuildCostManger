@@ -18,6 +18,7 @@ const Workers = () => {
   const [worker, setWorker] = useState({
     id: "",
     name: "",
+    phoneNumber: "",
     specialty: "",
     startedOn: "",
     endedOn: "",
@@ -48,7 +49,7 @@ const Workers = () => {
   const workers = useSelector((state) => state.workerTable.workers) || [];
   const specialties =
     useSelector((state) => state.workerTable.specialties) || [];
-  console.log(workers);
+
   useEffect(() => {
     const fetchData = async () => {
       await Promise.all([
@@ -70,6 +71,7 @@ const Workers = () => {
   const columns = useMemo(
     () => [
       { id: "name", Header: "Name", accessor: "name" },
+      { id: "phoneNumber", Header: "Phone Number", accessor: "phoneNumber" },
       { id: "specialty", Header: "Specialty", accessor: "specialty" },
       { id: "startedOn", Header: "Started On", accessor: "startedOn" },
       {
