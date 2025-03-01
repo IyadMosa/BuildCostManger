@@ -7,6 +7,7 @@ const TicketContainer = styled(Box)`
   overflow-x: auto;
   padding-top: 16px;
   flex-direction: column;
+  min-height: 200px;
 `;
 
 const TicketGroup = styled(Box)`
@@ -52,7 +53,6 @@ const OrderedChecksDisplay = ({ orderedChecks }) => {
   }, 0);
   const progressPercentage =
     totalAmount === 0 ? 0 : (passedAmount / totalAmount) * 100;
-
   return (
     <TicketContainer>
       <Box display="flex" alignItems="center" gap={2}>

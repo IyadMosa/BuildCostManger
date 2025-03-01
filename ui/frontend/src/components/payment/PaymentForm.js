@@ -1,6 +1,4 @@
 import React from "react";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import {
   FormControl,
   Grid,
@@ -11,8 +9,13 @@ import {
   TextField,
 } from "@mui/material";
 import { AmountSelector } from "@iyadmosa/react-library";
+import DatePickerComponent from "../reusable/DatePickerComponent";
 
 const PaymentForm = ({ paymentData = {}, onChange, disabled = false }) => {
+  paymentData.paidAt ??= new Date();
+  paymentData.checkDate ??= new Date();
+  paymentData.transactionDate ??= new Date();
+  paymentData.currency ??= "NIS";
   const paymentMethods = [
     "Bank Transfer",
     "Cash",
@@ -26,10 +29,6 @@ const PaymentForm = ({ paymentData = {}, onChange, disabled = false }) => {
       ...prevData,
       [name]: value,
     }));
-  };
-
-  const handleDateChange = (name, date) => {
-    onChange((prevData) => ({ ...prevData, [name]: date }));
   };
 
   function toCamelCase(phrase) {
@@ -49,7 +48,7 @@ const PaymentForm = ({ paymentData = {}, onChange, disabled = false }) => {
             <AmountSelector
               label="Amount"
               name="amount"
-              amount={paymentData.amount}
+              amount={paymentData?.amount || 0}
               onChange={(value) =>
                 onChange((prevData) => ({ ...prevData, amount: value }))
               }
@@ -58,19 +57,12 @@ const PaymentForm = ({ paymentData = {}, onChange, disabled = false }) => {
               disabled={disabled}
             />
           </Grid>
-          <Grid item xs={12} sm={6}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                label="Paid At"
-                value={paymentData.paidAt}
-                onChange={(date) => handleDateChange("paidAt", date)} // Use consistent date handling
-                renderInput={(params) => (
-                  <TextField {...params} fullWidth required />
-                )}
-                disabled={disabled}
-              />
-            </LocalizationProvider>
-          </Grid>
+          <DatePickerComponent
+            label="Paid At"
+            value={paymentData?.paidAt}
+            onChange={(date) => onChange({ ...paymentData, paidAt: date })}
+            disabled={disabled}
+          />
 
           <Grid item xs={12}>
             <FormControl fullWidth required>
@@ -97,7 +89,6 @@ const PaymentForm = ({ paymentData = {}, onChange, disabled = false }) => {
               </Select>
             </FormControl>
           </Grid>
-
           {/* Conditional Rendering - Refactored for clarity and conciseness */}
           {["BANK TRANSFER", "CASH", "CHECK", "CREDIT CARD"].map((method) => {
             if (paymentData.paymentMethod?.toUpperCase() === method) {
@@ -125,21 +116,14 @@ const PaymentForm = ({ paymentData = {}, onChange, disabled = false }) => {
                           />
                         </Grid>
                       ))}
-                      <Grid item xs={12}>
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                          <DatePicker
-                            label="Transaction Date"
-                            value={paymentData.transactionDate}
-                            onChange={(date) =>
-                              handleDateChange("transactionDate", date)
-                            }
-                            renderInput={(params) => (
-                              <TextField {...params} fullWidth required />
-                            )}
-                            disabled={disabled}
-                          />
-                        </LocalizationProvider>
-                      </Grid>
+                      <DatePickerComponent
+                        label="Transaction Date"
+                        value={paymentData?.transactionDate}
+                        onChange={(date) =>
+                          onChange({ ...paymentData, transactionDate: date })
+                        }
+                        disabled={disabled}
+                      />
                     </>
                   )}
                   {method === "CASH" && (
@@ -148,7 +132,7 @@ const PaymentForm = ({ paymentData = {}, onChange, disabled = false }) => {
                         <InputLabel>Currency</InputLabel>
                         <Select
                           name="currency"
-                          value={paymentData.currency}
+                          value={paymentData?.currency || "NIS"}
                           onChange={handleChange}
                           disabled={disabled}
                         >
@@ -176,21 +160,14 @@ const PaymentForm = ({ paymentData = {}, onChange, disabled = false }) => {
                           />
                         </Grid>
                       ))}
-                      <Grid item xs={12}>
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                          <DatePicker
-                            label="CHECK Date"
-                            value={paymentData.checkDate}
-                            onChange={(date) =>
-                              handleDateChange("checkDate", date)
-                            }
-                            renderInput={(params) => (
-                              <TextField {...params} fullWidth required />
-                            )}
-                            disabled={disabled}
-                          />
-                        </LocalizationProvider>
-                      </Grid>
+                      <DatePickerComponent
+                        label="CHECK Date"
+                        value={paymentData?.checkDate}
+                        onChange={(date) =>
+                          onChange({ ...paymentData, checkDate: date })
+                        }
+                        disabled={disabled}
+                      />
                     </>
                   )}
                   {method === "CREDIT CARD" && (
@@ -206,21 +183,14 @@ const PaymentForm = ({ paymentData = {}, onChange, disabled = false }) => {
                           disabled={disabled}
                         />
                       </Grid>
-                      <Grid item xs={12}>
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                          <DatePicker
-                            label="Transaction Date"
-                            value={paymentData.transactionDate}
-                            onChange={(date) =>
-                              handleDateChange("transactionDate", date)
-                            }
-                            renderInput={(params) => (
-                              <TextField {...params} fullWidth required />
-                            )}
-                            disabled={disabled}
-                          />
-                        </LocalizationProvider>
-                      </Grid>
+                      <DatePickerComponent
+                        label="Transaction Date"
+                        value={paymentData?.transactionDate}
+                        onChange={(date) =>
+                          onChange({ ...paymentData, transactionDate: date })
+                        }
+                        disabled={disabled}
+                      />
                     </>
                   )}
                 </React.Fragment>
