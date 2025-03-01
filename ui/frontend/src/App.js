@@ -20,6 +20,8 @@ import LoginPage from "./components/LoginPage";
 import Dashboard from "./components/Dashboard";
 import Workers from "./components/worker/Workers.js";
 import WorkerBills from "./components/worker/WorkerBills";
+import Shops from "./components/shop/Shops";
+import ShopBills from "./components/shop/ShopBills";
 
 // Private Route Component
 const PrivateRoute = ({ children }) => {
@@ -41,6 +43,9 @@ const TopMenu = () => {
           </Button>
           <Button color="inherit" component={Link} to="/workers">
             Workers
+          </Button>{" "}
+          <Button color="inherit" component={Link} to="/shops">
+            Shops
           </Button>
         </Box>
       </Toolbar>
@@ -54,7 +59,7 @@ const App = () => (
     <Router>
       <CssBaseline />
       <TopMenu />
-      <Container sx={{ mt: 10 }}>
+      <Container sx={{ width: "100%", marginTop: "100px" }} maxWidth={false}>
         <Routes>
           <Route path="/" element={<LoginPage />} />
           <Route
@@ -78,6 +83,22 @@ const App = () => (
             element={
               <PrivateRoute>
                 <WorkerBills />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/shops"
+            element={
+              <PrivateRoute>
+                <Shops />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/shop-bills/:name"
+            element={
+              <PrivateRoute>
+                <ShopBills />
               </PrivateRoute>
             }
           />
