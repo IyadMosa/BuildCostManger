@@ -86,7 +86,13 @@ const WorkerBills = () => {
 
   const columns = useMemo(
     () => [
-      { id: "id", Header: "ID", accessor: "id", minWidth: 300 },
+      {
+        id: "id",
+        Header: "ID",
+        accessor: "id",
+        minWidth: 200,
+        maxWidth: 400,
+      },
       { id: "paidAt", Header: "Paid At", accessor: "paidAt" },
       { id: "amount", Header: "Amount", accessor: "amount" },
       {
@@ -95,14 +101,17 @@ const WorkerBills = () => {
         accessor: "paymentMethod",
       },
       {
-        Header: "",
+        maxWidth: 50,
         filterable: false,
         sortable: false,
-        resizable: false,
         Cell: (row) => (
           <button
             onClick={() => handlePaymentInfoClick(row.original.id)}
-            style={{ background: "none", border: "none", cursor: "pointer" }}
+            style={{
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+            }}
           >
             <FaInfoCircle size={20} />
           </button>
@@ -151,7 +160,7 @@ const WorkerBills = () => {
       />
       <OrderedChecksDisplay orderedChecks={orderedChecks} />
       <TableScreen
-        title=""
+        title="Worker Payments"
         onInit={async () => {
           setLoading(true);
           await dispatch(getPaymentsByWorker(name));
