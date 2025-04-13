@@ -9,7 +9,7 @@ public class WorkerConverter extends AbstractConverter<String, WorkerSpecialty> 
 
     @Override
     protected WorkerSpecialty convert(String source) {
-        return WorkerSpecialty.valueOf(source.toUpperCase());
+        return WorkerSpecialty.valueOf(source.toUpperCase().replace(" ", "_"));
     }
 
 }
