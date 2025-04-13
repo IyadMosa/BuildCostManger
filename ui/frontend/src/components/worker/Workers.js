@@ -4,7 +4,6 @@ import {
   addWorker,
   getAllWorkers,
   getWorker,
-  getWorkerSpecialties,
 } from "../../actions/workerAction";
 import { LoadingSpinner, Modal, TableScreen } from "@iyadmosa/react-library";
 import AddWorkerForm from "./AddWorkerForm";
@@ -15,6 +14,10 @@ import { useNavigate } from "react-router-dom";
 
 const Workers = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const workers = useSelector((state) => state.workerTable.workers) || [];
+  const workerToEdit = useSelector((state) => state.workerTable.worker) || {};
+
   const [worker, setWorker] = useState({
     id: "",
     name: "",
@@ -24,6 +27,7 @@ const Workers = () => {
     endedOn: "",
     totalMoneyAmountRequested: "",
   });
+
   const [paymentData, setPaymentData] = useState({
     paidAt: new Date(),
     amount: null,
@@ -45,28 +49,59 @@ const Workers = () => {
   const [workerName, setWorkerName] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
-  const dispatch = useDispatch();
-  const workers = useSelector((state) => state.workerTable.workers) || [];
-  const specialties =
-    useSelector((state) => state.workerTable.specialties) || [];
 
   useEffect(() => {
     const fetchData = async () => {
-      await Promise.all([
-        dispatch(getAllWorkers()),
-        dispatch(getWorkerSpecialties()),
-      ]);
+      await dispatch(getAllWorkers());
       setLoading(false);
     };
     fetchData();
   }, [dispatch]);
 
+  useEffect(() => {
+    if (isEditing && workerToEdit?.name) {
+      setWorker(workerToEdit);
+    }
+  }, [workerToEdit, isEditing]);
+
   const handleGetBillsClick = useCallback(
     (name) => {
-      navigate(`/worker-bills/${encodeURIComponent(name)}`); // Redirect to new page with worker name in URL
+      navigate(`/worker-bills/${encodeURIComponent(name)}`);
     },
     [navigate]
   );
+
+  const handlePaymentClick = useCallback((name) => {
+    setWorkerName(name);
+    setIsModalOpen(true);
+  }, []);
+
+  const handleEditWorker = useCallback(
+    async (name) => {
+      setWorkerName(name);
+      await dispatch(getWorker(name));
+      setIsEditing(true);
+      setIsWorkerModalOpen(true);
+    },
+    [dispatch]
+  );
+
+  const handleSubmitEditedWorker = async () => {
+    if (worker) {
+      await dispatch(addWorker(worker));
+      setWorker({});
+      setIsWorkerModalOpen(false);
+      setIsEditing(false);
+    }
+  };
+
+  const handleSubmitPayment = async () => {
+    if (workerName) {
+      await dispatch(payForWorker(workerName, paymentData));
+      setWorkerName(null);
+      setIsModalOpen(false);
+    }
+  };
 
   const columns = useMemo(
     () => [
@@ -86,6 +121,7 @@ const Workers = () => {
         filterable: false,
         sortable: false,
         resizable: false,
+        maxWidth: 120,
         Cell: (row) => (
           <div style={{ display: "flex", gap: "10px" }}>
             <button
@@ -110,43 +146,8 @@ const Workers = () => {
         ),
       },
     ],
-    []
+    [handleEditWorker, handlePaymentClick, handleGetBillsClick]
   );
-
-  const handlePaymentClick = useCallback((name) => {
-    setWorkerName(name);
-    setIsModalOpen(true);
-  }, []);
-
-  const workerToEdit = useSelector((state) => state.workerTable.worker) || {};
-
-  const handleEditWorker = useCallback(
-    (name) => {
-      setWorkerName(name); // You can keep this to update the state
-      setIsWorkerModalOpen(true);
-      setIsEditing(true);
-      setWorker(workerToEdit);
-      dispatch(getWorker(name));
-    },
-    [dispatch]
-  );
-
-  const handleSubmitEditedWorker = async () => {
-    if (worker) {
-      await dispatch(addWorker(worker));
-      setWorker(null);
-      setIsWorkerModalOpen(false);
-      setIsEditing(false);
-    }
-  };
-
-  const handleSubmitPayment = async () => {
-    if (workerName) {
-      await dispatch(payForWorker(workerName, paymentData));
-      setWorkerName(null);
-      setIsModalOpen(false);
-    }
-  };
 
   if (loading) return <LoadingSpinner />;
 
@@ -166,7 +167,6 @@ const Workers = () => {
           <AddWorkerForm
             worker={worker}
             onChange={setWorker}
-            specialties={specialties}
             isEdit={isEditing}
           />
         }
@@ -183,20 +183,19 @@ const Workers = () => {
       >
         <PaymentForm paymentData={paymentData} onChange={setPaymentData} />
       </Modal>
+
       <Modal
-        title="Payment Modal"
+        title="Edit Worker"
         isOpen={isWorkerModalOpen}
         onSubmit={handleSubmitEditedWorker}
         onClose={() => {
           setIsWorkerModalOpen(false);
-          setWorkerName(null);
-          setWorker(null);
+          setIsEditing(false);
         }}
       >
         <AddWorkerForm
           worker={worker}
           onChange={setWorker}
-          specialties={specialties}
           isEdit={isEditing}
         />
       </Modal>

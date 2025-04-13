@@ -1,17 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Box,
+  FormControl,
   Grid,
+  InputLabel,
   MenuItem,
   Select,
   TextField,
-  FormControl,
-  InputLabel,
 } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
+import { LocalizationProvider } from "@mui/x-date-pickers";
 import styled from "styled-components";
 import ReactInputMask from "react-input-mask";
+import DatePickerComponent from "../reusable/DatePickerComponent";
+import { getWorkerSpecialties } from "../../actions/workerAction";
+import { useDispatch, useSelector } from "react-redux";
 
 const FormContainer = styled(Box)`
   display: flex;
@@ -19,13 +22,22 @@ const FormContainer = styled(Box)`
   gap: 16px;
 `;
 
-const AddWorkerForm = ({
-  worker = {},
-  onChange,
-  specialties = [],
-  isEdit,
-  disabled,
-}) => {
+const AddWorkerForm = ({ worker = {}, onChange, isEdit, disabled }) => {
+  console.log("Worker form", worker);
+  const dispatch = useDispatch();
+
+  const specialties =
+    useSelector((state) => state.workerTable.specialties) || [];
+
+  useEffect(() => {
+    if (specialties.length === 0) {
+      const fetchData = async () => {
+        await dispatch(getWorkerSpecialties());
+      };
+      fetchData();
+    }
+  }, [dispatch, specialties.length]);
+
   const handleChange = (field, value) => {
     onChange((prevData) => ({ ...prevData, [field]: value }));
   };
@@ -126,28 +138,19 @@ const AddWorkerForm = ({
               )}
             </ReactInputMask>
           </Grid>
+          <DatePickerComponent
+            label="Started On"
+            value={worker?.startedOn || null}
+            onChange={(date) => handleChange("startedOn", date)}
+            disabled={disabled}
+          />
 
-          <Grid item xs={6}>
-            <DatePicker
-              label="Started On"
-              value={worker?.startedOn || null}
-              onChange={(date) => handleChange("startedOn", date)}
-              renderInput={(params) => (
-                <TextField {...params} fullWidth required />
-              )}
-              disabled={isEdit || disabled}
-            />
-          </Grid>
-
-          <Grid item xs={6}>
-            <DatePicker
-              label="Ended On"
-              value={worker?.endedOn || null}
-              onChange={(date) => handleChange("endedOn", date)}
-              renderInput={(params) => <TextField {...params} fullWidth />}
-              disabled={disabled}
-            />
-          </Grid>
+          <DatePickerComponent
+            label="Ended On"
+            value={worker?.endedOn}
+            onChange={(date) => handleChange("endedOn", date)}
+            disabled={disabled}
+          />
         </Grid>
       </FormContainer>
     </LocalizationProvider>

@@ -8,12 +8,14 @@ import {
 const initialState = {
   workers: [],
   specialties: [],
+  worker: {},
   error: null,
 };
 
 const handleErrorState = (state, action) => ({
   ...state,
   workers: [],
+  specialties: [],
   worker: {},
   error: action.payload || "An error occurred", // Ensure error message is printed properly
 });

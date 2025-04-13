@@ -117,6 +117,7 @@ const Shops = () => {
         filterable: false,
         sortable: false,
         resizable: false,
+        maxWidth: 120,
         Cell: (row) => (
           <div style={{ display: "flex", gap: "10px" }}>
             <button
