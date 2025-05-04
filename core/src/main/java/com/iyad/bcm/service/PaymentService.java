@@ -60,6 +60,7 @@ public class PaymentService {
     public void payForShop(String name, PaymentDTO dto) throws Throwable {
         Payment payment = processPayment(dto);
         Shop shop = shopService.getShopByName(name);
+        shop.setTotalMoneyAmountPaid(shop.getTotalMoneyAmountPaid() + dto.getAmount());
         payment.setShop(shop);
         paymentRepository.save(payment);
 

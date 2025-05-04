@@ -23,6 +23,8 @@ public class Shop {
     private String phoneNumber;
 
     private String location;
+    private double totalMoneyAmountRequested;
+    private double totalMoneyAmountPaid;
 
     @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Payment> payments;

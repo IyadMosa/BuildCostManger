@@ -11,4 +11,6 @@ public class ShopDTO {
     private String shopOwner;
     private String location;
     private String phoneNumber;
+    private double totalMoneyAmountRequested;
+    private double totalMoneyAmountPaid;
 }
