@@ -133,6 +133,10 @@ const Workers = () => {
             <button
               onClick={() => handlePaymentClick(row.original.name)}
               style={{ background: "none", border: "none", cursor: "pointer" }}
+              disabled={
+                row.original.totalMoneyAmountRequested ===
+                row.original.totalMoneyAmountPaid
+              }
             >
               <FaDollarSign size={20} />
             </button>
