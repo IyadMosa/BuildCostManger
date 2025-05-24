@@ -2,6 +2,7 @@ import { RestRequest } from "./RestRequest";
 import {
   PAYMENT_DETAILS,
   PAYMENT_ERROR,
+  PAYMENTS,
   SHOP_PAYMENTS,
   WORKER_PAYMENTS,
 } from "./types";
@@ -59,6 +60,16 @@ export const fetchPaymentsById = (id) => (dispatch) => {
   return RestRequest(`/api/payments/${id}`, "GET", null)
     .then((data) => {
       dispatch({ type: PAYMENT_DETAILS, payload: data });
+    })
+    .catch((error) => {
+      dispatch({ type: PAYMENT_ERROR, payload: error.message });
+    });
+};
+
+export const getPayments = () => (dispatch) => {
+  return RestRequest(`/api/payments`, "GET", null)
+    .then((data) => {
+      dispatch({ type: PAYMENTS, payload: data });
     })
     .catch((error) => {
       dispatch({ type: PAYMENT_ERROR, payload: error.message });

@@ -1,6 +1,7 @@
 import {
   PAYMENT_DETAILS,
   PAYMENT_ERROR,
+  PAYMENTS,
   SHOP_PAYMENTS,
   WORKER_PAYMENTS,
 } from "../actions/types";
@@ -8,6 +9,7 @@ import {
 const initialState = {
   workerPayments: [],
   shopPayments: [],
+  payments: [],
   error: null,
 };
 
@@ -27,6 +29,8 @@ export default function paymentReducer(state = initialState, action) {
       return { ...state, shopPayments: action.payload, error: null };
     case PAYMENT_DETAILS:
       return { ...state, paymentDetails: action.payload, error: null };
+    case PAYMENTS:
+      return { ...state, payments: action.payload, error: null };
     case PAYMENT_ERROR:
       return handleErrorState(state, action);
 

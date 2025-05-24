@@ -16,6 +16,7 @@ export const PAYMENT_ERROR = "PAYMENT_ERROR";
 export const WORKER_PAYMENTS = "WORKER_PAYMENTS";
 export const SHOP_PAYMENTS = "SHOP_PAYMENTS";
 export const PAYMENT_DETAILS = "PAYMENT_DETAILS";
+export const PAYMENTS = "PAYMENTS";
 
 //Shops
 export const SHOP = "SHOP";

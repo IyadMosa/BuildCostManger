@@ -19,6 +19,12 @@ public class PaymentController {
         this.paymentService = paymentService;
     }
 
+    @GetMapping()
+    public ResponseEntity<List<PaymentDTO>> getPayments() {
+        List<PaymentDTO> dtos = paymentService.getPayments();
+        return ResponseEntity.ok(dtos);
+    }
+
     @GetMapping("/{paymentId}")
     public ResponseEntity<PaymentDTO> getPayment(@PathVariable UUID paymentId) {
         PaymentDTO paymentDTO = paymentService.getPaymentById(paymentId);

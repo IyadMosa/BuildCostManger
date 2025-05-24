@@ -48,6 +48,13 @@ public class PaymentService {
         return modelMapper.map(payment, PaymentDTO.class);
     }
 
+    @Transactional(readOnly = true)
+    public List<PaymentDTO> getPayments() {
+        return paymentRepository.findAll().stream()
+                .map(payment -> modelMapper.map(payment, PaymentDTO.class))
+                .toList();
+    }
+
     //Shop
     @Transactional(readOnly = true)
     public List<PaymentDTO> getPaymentsByShopName(String shopName) {

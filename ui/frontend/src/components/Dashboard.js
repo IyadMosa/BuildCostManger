@@ -4,6 +4,7 @@ import { getAllWorkers } from "../actions/workerAction";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllShops } from "../actions/shopAction";
 import OrderedChecksDisplay from "./payment/OrderedChecksDisplay";
+import { getPayments } from "../actions/paymentAction";
 
 const Dashboard = () => {
   const [loading, setLoading] = useState(true);
@@ -13,13 +14,14 @@ const Dashboard = () => {
     const fetchData = async () => {
       await dispatch(getAllWorkers());
       await dispatch(getAllShops());
+      await dispatch(getPayments());
       setLoading(false);
     };
     fetchData();
   }, [dispatch]);
   const workers = useSelector((state) => state.workerTable.workers) || [];
   const shops = useSelector((state) => state.shops.shops) || [];
-  const payments = [];
+  const payments = useSelector((state) => state.payments.payments) || [];
 
   const workersColumns = useMemo(
     () => [
