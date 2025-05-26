@@ -2,7 +2,7 @@ const BASE_URL = "/rest/v1/bcm";
 const LOGIN_PATH = "/";
 
 const getAuthToken = () => localStorage.getItem("token");
-
+const getProjectId = () => localStorage.getItem("projectId");
 const handleUnauthorized = (response, url) => {
   if (url.includes("login")) {
     return response.json(); // Handle login response
@@ -23,7 +23,13 @@ const handleResponse = (response, url) => {
 };
 
 export const RestRequest = (url, method = "GET", body = null) => {
-  return fetch(`${BASE_URL}${url}`, {
+  const projectId = getProjectId();
+  const urlWithProjectId =
+    projectId && !url.includes("/login") && !url.includes("/projects")
+      ? `/${projectId}${url}`
+      : url;
+  console.log(`Making API Request: ${method} ${BASE_URL}${urlWithProjectId}`);
+  return fetch(`${BASE_URL}${urlWithProjectId}`, {
     method,
     headers: {
       "Content-Type": "application/json",

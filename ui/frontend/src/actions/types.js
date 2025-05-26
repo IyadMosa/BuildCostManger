@@ -28,3 +28,8 @@ export const MATERIALS = "MATERIALS";
 export const MATERIAL = "MATERIAL";
 
 export const MATERIALS_ERROR = "MATERIALS_ERROR";
+
+//Projects
+export const PROJECTS = "PROJECTS";
+export const PROJECT_ERROR = "PROJECT_ERROR";
+export const SELECT_PROJECT = "SELECT_PROJECT";

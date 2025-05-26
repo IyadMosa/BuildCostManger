@@ -22,6 +22,7 @@ import Workers from "./components/worker/Workers.js";
 import WorkerBills from "./components/worker/WorkerBills";
 import Shops from "./components/shop/Shops";
 import ShopBills from "./components/shop/ShopBills";
+import ProjectsPage from "./components/ProjectsPage";
 
 // Private Route Component
 const PrivateRoute = ({ children }) => {
@@ -33,6 +34,7 @@ const PrivateRoute = ({ children }) => {
 const TopMenu = () => {
   const location = useLocation();
   if (location.pathname === "/") return null; // Hide menu on login page
+  if (location.pathname === "/projects") return null; // Hide menu on projects page
 
   return (
     <AppBar position="fixed">
@@ -46,6 +48,9 @@ const TopMenu = () => {
           </Button>{" "}
           <Button color="inherit" component={Link} to="/shops">
             Shops
+          </Button>
+          <Button color="inherit" component={Link} to="/projects">
+            Projects
           </Button>
         </Box>
       </Toolbar>
@@ -91,6 +96,14 @@ const App = () => (
             element={
               <PrivateRoute>
                 <Shops />
+              </PrivateRoute>
+            }
+          />{" "}
+          <Route
+            path="/projects"
+            element={
+              <PrivateRoute>
+                <ProjectsPage />
               </PrivateRoute>
             }
           />

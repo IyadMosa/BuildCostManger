@@ -9,7 +9,7 @@ export const login = (auth, navigate) => async (dispatch) => {
     } else {
       localStorage.setItem("token", data.token);
       dispatch({ type: LOGIN_SUCCESS, payload: data.token });
-      navigate("/dashboard"); // Navigate after successful login
+      navigate("/projects"); // Navigate after successful login
     }
   } catch (error) {
     dispatch({ type: LOGIN_ERROR, payload: error.message || "Login failed" });

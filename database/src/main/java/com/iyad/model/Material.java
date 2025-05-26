@@ -12,6 +12,10 @@ public class Material {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
+    @ManyToOne
+    private Project project;
+    @ManyToOne
+    private MyUser user;
     private String name;
     private String description;
     private double price;

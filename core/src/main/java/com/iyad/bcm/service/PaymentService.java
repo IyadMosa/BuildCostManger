@@ -3,6 +3,7 @@ package com.iyad.bcm.service;
 import com.iyad.bcm.dto.PaymentDTO;
 import com.iyad.model.*;
 import com.iyad.repository.PaymentRepository;
+import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,19 +12,14 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class PaymentService {
 
     private final PaymentRepository paymentRepository;
     private final ShopService shopService;
     private final WorkerService workerService;
     private final ModelMapper modelMapper;
-
-    public PaymentService(PaymentRepository paymentRepository, ShopService shopService, WorkerService workerService, ModelMapper modelMapper) {
-        this.paymentRepository = paymentRepository;
-        this.shopService = shopService;
-        this.workerService = workerService;
-        this.modelMapper = modelMapper;
-    }
+    private final ProjectAccessService projectAccessService;
 
     private Payment processPayment(PaymentDTO paymentDTO) {
         switch (paymentDTO.getPaymentMethod()) {
@@ -50,7 +46,10 @@ public class PaymentService {
 
     @Transactional(readOnly = true)
     public List<PaymentDTO> getPayments() {
-        return paymentRepository.findAll().stream()
+        ProjectUser projectUser = projectAccessService.validateAccessAndGet();
+        UUID projectId = projectUser.getProject().getId();
+        UUID userId = projectUser.getUser().getId();
+        return paymentRepository.findAllByProject_IdAndUser_Id(projectId, userId).stream()
                 .map(payment -> modelMapper.map(payment, PaymentDTO.class))
                 .toList();
     }
@@ -58,7 +57,10 @@ public class PaymentService {
     //Shop
     @Transactional(readOnly = true)
     public List<PaymentDTO> getPaymentsByShopName(String shopName) {
-        List<Payment> payments = paymentRepository.findByShop_Name(shopName);
+        ProjectUser projectUser = projectAccessService.validateAccessAndGet();
+        UUID projectId = projectUser.getProject().getId();
+        UUID userId = projectUser.getUser().getId();
+        List<Payment> payments = paymentRepository.findByShop_NameAndProject_IdAndUser_Id(shopName, projectId, userId);
         return payments.stream().map(payment -> modelMapper.map(payment, PaymentDTO.class)).toList();
     }
 
@@ -76,7 +78,10 @@ public class PaymentService {
     //Worker
     @Transactional(readOnly = true)
     public List<PaymentDTO> getPaymentsByWorkerName(String workerName) {
-        List<Payment> payments = paymentRepository.findByWorker_Name(workerName);
+        ProjectUser projectUser = projectAccessService.validateAccessAndGet();
+        UUID projectId = projectUser.getProject().getId();
+        UUID userId = projectUser.getUser().getId();
+        List<Payment> payments = paymentRepository.findByWorker_NameAndProject_IdAndUser_Id(workerName, projectId, userId);
         return payments.stream().map(payment -> modelMapper.map(payment, PaymentDTO.class)).toList();
     }
 

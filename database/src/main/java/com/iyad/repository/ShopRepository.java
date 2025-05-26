@@ -12,10 +12,12 @@ import java.util.UUID;
 @Repository
 public interface ShopRepository extends JpaRepository<Shop, UUID> {
 
-    Optional findByName(String name);
+    Optional<Shop> findByNameAndProject_IdAndUser_Id(String name, UUID projectId, UUID userId);
 
-    int deleteByName(String name);
+    int deleteByNameAndProject_IdAndUser_Id(String name, UUID projectId, UUID userId);
 
-    @Query("SELECT s.name FROM Shop s")
-    Set<String> findShopNames();
+    @Query("SELECT DISTINCT s.name FROM Shop s WHERE s.project.id = :projectId AND s.user.id = :userId")
+    Set<String> findShopNamesByProject_IdAndUser_Id(UUID projectId, UUID userId);
+
+    Set<Shop> findAllByProject_IdAndUser_Id(UUID projectId, UUID userId);
 }

@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Repository
 public interface MaterialRepository extends JpaRepository<Material, UUID> {
-    List<Material> findByShop_Name(String name);
+    List<Material> findByShop_NameAndProject_IdAndUser_Id(String name, UUID projectId, UUID userId);
 
 }
 

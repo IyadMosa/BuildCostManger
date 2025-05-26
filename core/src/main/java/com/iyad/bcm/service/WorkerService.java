@@ -2,6 +2,7 @@ package com.iyad.bcm.service;
 
 import com.iyad.bcm.dto.WorkerDTO;
 import com.iyad.enums.WorkerSpecialty;
+import com.iyad.model.ProjectUser;
 import com.iyad.model.Worker;
 import com.iyad.repository.WorkerRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,41 +14,42 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class WorkerService {
 
     private final WorkerRepository workerRepository;
     private final ModelMapper modelMapper;
+    private final ProjectAccessService projectAccessService;
 
-    public WorkerService(WorkerRepository workerRepository, ModelMapper modelMapper) {
-        this.workerRepository = workerRepository;
-        this.modelMapper = modelMapper;
-    }
     @Transactional
     public void addWorker(WorkerDTO dto) {
-        Optional byName = workerRepository.findByName(dto.getName());
+        ProjectUser projectUser = projectAccessService.validateAccessAndGet();
+        UUID projectId = projectUser.getProject().getId();
+        UUID userId = projectUser.getUser().getId();
+        Optional byName = workerRepository.findByNameAndProject_IdAndUser_Id(dto.getName(), projectId, userId);
         Worker worker = modelMapper.map(dto, Worker.class);
         if (byName.isPresent()) {
             worker.setId(((Worker) byName.get()).getId());
         }
+        worker.setProject(projectUser.getProject());
+        worker.setUser(projectUser.getUser());
         workerRepository.save(worker);
     }
 
-    public WorkerDTO getWorkerById(UUID id) {
-        Worker worker = workerRepository.findById(id).orElse(null);
-        return modelMapper.map(worker, WorkerDTO.class);
-    }
-
     public Worker getWorkerByName(String workerName) throws Throwable {
-        Worker worker = (Worker) workerRepository.findByName(workerName)
-                .orElseThrow(() -> new Exception("Worker not found with name: " + workerName));
+        ProjectUser projectUser = projectAccessService.validateAccessAndGet();
+        UUID projectId = projectUser.getProject().getId();
+        UUID userId = projectUser.getUser().getId();
+        Worker worker = workerRepository.findByNameAndProject_IdAndUser_Id(workerName, projectId, userId).orElseThrow(() -> new Exception("Worker not found with name: " + workerName));
         return worker;
 
     }
 
     public List<WorkerDTO> getAllWorkers() {
-        return workerRepository.findAll().stream()
-                .map(worker -> modelMapper.map(worker, WorkerDTO.class))
-                .toList();
+        ProjectUser projectUser = projectAccessService.validateAccessAndGet();
+        UUID projectId = projectUser.getProject().getId();
+        UUID userId = projectUser.getUser().getId();
+        return workerRepository.findAllByProject_IdAndUser_id(projectId, userId).stream().map(worker -> modelMapper.map(worker, WorkerDTO.class)).toList();
     }
 
     public Set<String> getWorkerSpecialities() {

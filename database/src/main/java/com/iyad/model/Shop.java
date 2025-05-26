@@ -14,7 +14,10 @@ public class Shop {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-
+    @ManyToOne
+    private Project project;
+    @ManyToOne
+    private MyUser user;
     @Column(nullable = false, unique = true, updatable = false)
     private String name;
 
