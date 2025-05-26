@@ -4,6 +4,7 @@ export const LOGIN_ERROR = "LOGIN_ERROR";
 export const REGISTER_SUCCESS = "REGISTER_SUCCESS";
 export const REGISTER_ERROR = "REGISTER_ERROR";
 export const GET_USER = "GET_USER";
+export const LOGOUT = "LOGOUT";
 
 //Workers
 export const WORKER = "WORKER";

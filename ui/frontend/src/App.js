@@ -1,19 +1,20 @@
 import {
   BrowserRouter as Router,
+  Link,
   Navigate,
   Route,
   Routes,
-  Link,
   useLocation,
+  useNavigate,
 } from "react-router-dom";
-import { Provider, useSelector } from "react-redux";
+import { Provider, useDispatch, useSelector } from "react-redux";
 import {
   AppBar,
-  Toolbar,
-  Button,
   Box,
+  Button,
   Container,
   CssBaseline,
+  Toolbar,
 } from "@mui/material";
 import store from "./store";
 import LoginPage from "./components/LoginPage";
@@ -23,6 +24,7 @@ import WorkerBills from "./components/worker/WorkerBills";
 import Shops from "./components/shop/Shops";
 import ShopBills from "./components/shop/ShopBills";
 import ProjectsPage from "./components/ProjectsPage";
+import { LOGOUT } from "./actions/types";
 
 // Private Route Component
 const PrivateRoute = ({ children }) => {
@@ -35,7 +37,8 @@ const TopMenu = () => {
   const location = useLocation();
   if (location.pathname === "/") return null; // Hide menu on login page
   if (location.pathname === "/projects") return null; // Hide menu on projects page
-
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   return (
     <AppBar position="fixed">
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -53,6 +56,15 @@ const TopMenu = () => {
             Projects
           </Button>
         </Box>
+        <Button
+          color="inherit"
+          onClick={() => {
+            dispatch({ type: LOGOUT }); // Dispatch logout action
+            navigate("/"); // Navigate to login page
+          }}
+        >
+          Logout
+        </Button>
       </Toolbar>
     </AppBar>
   );

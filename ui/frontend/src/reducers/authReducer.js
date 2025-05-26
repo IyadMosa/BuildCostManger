@@ -1,9 +1,8 @@
 import {
-  GET_USER,
   LOGIN_ERROR,
   LOGIN_SUCCESS,
+  LOGOUT,
   REGISTER_ERROR,
-  REGISTER_SUCCESS,
 } from "../actions/types";
 
 const initialState = {
@@ -14,7 +13,7 @@ const initialState = {
 const handleErrorState = (state, action) => ({
   ...state,
   token: null,
-  error: action.payload || "An error occurred", // Ensure error message is printed properly
+  error: action.payload || "An error occurred",
 });
 
 export default function authReducer(state = initialState, action) {
@@ -25,6 +24,9 @@ export default function authReducer(state = initialState, action) {
     case LOGIN_ERROR:
     case REGISTER_ERROR:
       return handleErrorState(state, action);
+    case LOGOUT:
+      localStorage.removeItem("token");
+      return { ...state, token: null, error: null };
 
     default:
       return state;
