@@ -71,6 +71,9 @@ public class PaymentService {
         Shop shop = shopService.getShopByName(name);
         shop.setTotalMoneyAmountPaid(shop.getTotalMoneyAmountPaid() + dto.getAmount());
         payment.setShop(shop);
+        ProjectUser projectUser = projectAccessService.validateAccessAndGet();
+        payment.setProject(projectUser.getProject());
+        payment.setUser(projectUser.getUser());
         paymentRepository.save(payment);
 
     }
@@ -91,6 +94,9 @@ public class PaymentService {
         Worker worker = workerService.getWorkerByName(name);
         worker.setTotalMoneyAmountPaid(worker.getTotalMoneyAmountPaid() + dto.getAmount());
         payment.setWorker(worker);
+        ProjectUser projectUser = projectAccessService.validateAccessAndGet();
+        payment.setProject(projectUser.getProject());
+        payment.setUser(projectUser.getUser());
         paymentRepository.save(payment);
     }
 }
