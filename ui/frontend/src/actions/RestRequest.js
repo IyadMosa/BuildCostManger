@@ -1,4 +1,4 @@
-const BASE_URL = "/rest/v1/bcm";
+export const BASE_URL = "/rest/v1/bcm";
 const LOGIN_PATH = "/";
 
 const getAuthToken = () => localStorage.getItem("token");

@@ -48,17 +48,21 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest) {
+    public ResponseEntity<?> register(@RequestBody LoginRequest registerRequest) {
         if (userService.getUserByName(registerRequest.getUsername()) != null) {
             return ResponseEntity.badRequest().body(new ApiResponse(false, "Username is already taken!"));
         }
 
         UserDTO user = new UserDTO(registerRequest.getUsername(), registerRequest.getPassword());
-        user.setEmail(registerRequest.getEmail());
-        user.setPhoneNumber(registerRequest.getPhoneNumber());
         user.setJoinAt(LocalDate.now());
         userService.createUser(user);
 
         return ResponseEntity.ok(new ApiResponse(true, "User registered successfully"));
+    }
+
+    @PostMapping("/check")
+    public ResponseEntity<?> checkUsername(@RequestBody String username) {
+        boolean isAvailable = userService.getUserByName(username) == null;
+        return ResponseEntity.ok(new ApiResponse(isAvailable, isAvailable ? "Username is available" : "Username is already taken"));
     }
 }
