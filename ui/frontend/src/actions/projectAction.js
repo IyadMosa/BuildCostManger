@@ -11,6 +11,9 @@ export const getProjects = () => (dispatch) => {
     });
 };
 
+export const createProject = (name) => {
+  return RestRequest("/api/projects", "POST", { name });
+};
 export const selectProject = (projectId, navigate) => (dispatch) => {
   localStorage.setItem("projectId", projectId);
   dispatch({ type: SELECT_PROJECT, payload: projectId });

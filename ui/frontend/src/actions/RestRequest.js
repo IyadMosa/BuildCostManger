@@ -28,7 +28,6 @@ export const RestRequest = (url, method = "GET", body = null) => {
     projectId && !url.includes("/login") && !url.includes("/projects")
       ? `/${projectId}${url}`
       : url;
-  console.log(`Making API Request: ${method} ${BASE_URL}${urlWithProjectId}`);
   return fetch(`${BASE_URL}${urlWithProjectId}`, {
     method,
     headers: {
