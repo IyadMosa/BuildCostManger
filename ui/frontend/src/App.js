@@ -22,7 +22,7 @@ import Workers from "./components/worker/Workers.js";
 import WorkerBills from "./components/worker/WorkerBills";
 import Shops from "./components/shop/Shops";
 import ShopBills from "./components/shop/ShopBills";
-import ProjectsPage from "./components/ProjectsPage";
+import ProjectsPage from "./components/projects/ProjectsPage";
 import { LOGOUT } from "./actions/types";
 import LoginForm from "./components/registration/LoginForm";
 import RegistrationForm from "./components/registration/RegistrationForm";

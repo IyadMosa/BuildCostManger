@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { LoadingSpinner } from "@iyadmosa/react-library";
 import { useDispatch, useSelector } from "react-redux";
-import { getProjects, selectProject } from "../actions/projectAction";
+import { getProjects, selectProject } from "../../actions/projectAction";
 import { useNavigate } from "react-router-dom";
 const ProjectsPage = () => {
   const [loading, setLoading] = useState(true);
