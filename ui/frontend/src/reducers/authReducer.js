@@ -26,6 +26,8 @@ export default function authReducer(state = initialState, action) {
       return handleErrorState(state, action);
     case LOGOUT:
       localStorage.removeItem("token");
+      localStorage.removeItem("projectId");
+      localStorage.removeItem("projectName");
       return { ...state, token: null, error: null };
 
     default:

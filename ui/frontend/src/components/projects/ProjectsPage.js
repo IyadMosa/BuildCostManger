@@ -39,7 +39,6 @@ const ProjectsPage = () => {
   const handleCreateProject = async () => {
     setError("");
     const result = await createProject(newProjectName);
-    console.log("Create Project Result:", result);
     if (result.success) {
       setShowModal(false);
       setNewProjectName("");
@@ -56,7 +55,7 @@ const ProjectsPage = () => {
       {projects.map((project) => (
         <ProjectCard
           key={project.id}
-          onClick={() => dispatch(selectProject(project.id, navigate))}
+          onClick={() => dispatch(selectProject(project, navigate))}
         >
           <ProjectTitle>{project.name}</ProjectTitle>
         </ProjectCard>

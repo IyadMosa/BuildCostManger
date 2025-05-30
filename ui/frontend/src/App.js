@@ -26,6 +26,8 @@ import ProjectsPage from "./components/projects/ProjectsPage";
 import { LOGOUT } from "./actions/types";
 import LoginForm from "./components/registration/LoginForm";
 import RegistrationForm from "./components/registration/RegistrationForm";
+import SelectedProjectName from "./components/reusable/ProjectNameContainer";
+import React from "react";
 
 // Private Route Component
 const PrivateRoute = ({ children }) => {
@@ -45,6 +47,7 @@ const TopMenu = () => {
     <AppBar position="fixed">
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
         <Box sx={{ display: "flex", gap: 2 }}>
+          <SelectedProjectName />
           <Button color="inherit" component={Link} to="/dashboard">
             Dashboard
           </Button>
