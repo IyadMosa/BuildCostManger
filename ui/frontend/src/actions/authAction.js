@@ -1,43 +1,4 @@
-import { BASE_URL, RestRequest } from "./RestRequest";
-import {
-  LOGIN_ERROR,
-  LOGIN_SUCCESS,
-  REGISTER_ERROR,
-  REGISTER_SUCCESS,
-} from "./types";
-
-export const login = (auth, navigate) => async (dispatch) => {
-  try {
-    const data = await RestRequest("/api/auth/login", "POST", auth);
-    if (data.success === false) {
-      dispatch({ type: LOGIN_ERROR, payload: data.message });
-    } else {
-      localStorage.setItem("token", data.token);
-      dispatch({ type: LOGIN_SUCCESS, payload: data.token });
-      navigate("/projects"); // Navigate after successful login
-    }
-  } catch (error) {
-    dispatch({ type: LOGIN_ERROR, payload: error.message || "Login failed" });
-  }
-};
-export const register = (user, navigate) => async (dispatch) => {
-  try {
-    const data = await RestRequest("/api/auth/register", "POST", user);
-
-    if (data.success === false) {
-      dispatch({
-        type: REGISTER_ERROR,
-        payload: data.message,
-      });
-    } else {
-      localStorage.setItem("token", data.token);
-      dispatch({ type: REGISTER_SUCCESS, payload: data.message });
-      navigate("/"); // Navigate after successful login
-    }
-  } catch (error) {
-    dispatch({ type: LOGIN_ERROR, payload: error.message || "Login failed" });
-  }
-};
+import { BASE_URL } from "./RestRequest";
 
 export const login_new = async (username, password) => {
   try {
