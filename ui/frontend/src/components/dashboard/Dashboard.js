@@ -1,10 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { LoadingSpinner, Table, TotalPaid } from "@iyadmosa/react-library";
-import { getAllWorkers } from "../actions/workerAction";
+import { getAllWorkers } from "../../actions/workerAction";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllShops } from "../actions/shopAction";
-import { getPayments } from "../actions/paymentAction";
-import CheckPaymentsByMonth from "./payment/CheckPaymentsByMonth";
+import { getAllShops } from "../../actions/shopAction";
+import { getPayments } from "../../actions/paymentAction";
+import CheckPaymentsByMonth from "../payment/CheckPaymentsByMonth";
+import { CardContainer, CardsWrapper, Container, TablesWrapper } from "./style";
 
 const Dashboard = () => {
   const [loading, setLoading] = useState(true);
@@ -51,34 +52,43 @@ const Dashboard = () => {
 
   if (loading) return <LoadingSpinner />;
   return (
-    <div>
-      <div>
-        <TotalPaid
-          name={"workers"}
-          totalPaid={workers.reduce(
-            (sum, worker) => sum + worker.totalMoneyAmountPaid,
-            0
-          )}
-          totalRequested={workers.reduce(
-            (sum, worker) => sum + worker.totalMoneyAmountRequested,
-            0
-          )}
-        />
-        <TotalPaid
-          name={"shops"}
-          totalPaid={payments.reduce((sum, payment) => sum + payment.amount, 0)}
-          totalRequested={shops.reduce(
-            (sum, shop) => sum + shop.totalMoneyAmountRequested,
-            0
-          )}
-        />
-        <CheckPaymentsByMonth payments={payments} />
-      </div>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <Table tableTitle={"Workers"} columns={workersColumns} data={workers} />
-        <Table tableTitle={"Shops"} columns={shopColumns} data={shops} />
-      </div>
-    </div>
+    <Container>
+      <CardsWrapper>
+        <CardContainer>
+          <TotalPaid
+            name="workers"
+            totalPaid={workers.reduce(
+              (sum, w) => sum + w.totalMoneyAmountPaid,
+              0
+            )}
+            totalRequested={workers.reduce(
+              (sum, w) => sum + w.totalMoneyAmountRequested,
+              0
+            )}
+          />
+        </CardContainer>
+        <CardContainer>
+          <TotalPaid
+            name="shops"
+            totalPaid={shops.reduce(
+              (sum, w) => sum + w.totalMoneyAmountPaid,
+              0
+            )}
+            totalRequested={shops.reduce(
+              (sum, s) => sum + s.totalMoneyAmountRequested,
+              0
+            )}
+          />
+        </CardContainer>
+      </CardsWrapper>
+
+      <CheckPaymentsByMonth payments={payments} />
+
+      <TablesWrapper>
+        <Table tableTitle="Workers" columns={workersColumns} data={workers} />
+        <Table tableTitle="Shops" columns={shopColumns} data={shops} />
+      </TablesWrapper>
+    </Container>
   );
 };
 

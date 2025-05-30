@@ -17,7 +17,7 @@ import {
   Toolbar,
 } from "@mui/material";
 import store from "./store";
-import Dashboard from "./components/Dashboard";
+import Dashboard from "./components/dashboard/Dashboard";
 import Workers from "./components/worker/Workers.js";
 import WorkerBills from "./components/worker/WorkerBills";
 import Shops from "./components/shop/Shops";

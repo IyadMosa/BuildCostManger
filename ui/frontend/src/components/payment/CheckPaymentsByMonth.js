@@ -62,7 +62,8 @@ const CheckPaymentsByMonth = ({ payments }) => {
                       <>
                         <div className="font-medium">#{check.checkNumber}</div>
                         <div className="text-xs text-gray-600">
-                          {check.payeeName} —{" "}
+                          Owner: {check.payeeName} <br />
+                          Date:{" "}
                           {format(parseISO(check.checkDate), "dd MMM yyyy")}
                           <br />
                           {check.amount} NIS
