@@ -31,7 +31,7 @@ import React from "react";
 
 // Private Route Component
 const PrivateRoute = ({ children }) => {
-  const token = useSelector((state) => state.auth.token);
+  const token = localStorage.getItem("token");
   return token ? children : <Navigate to="/" />;
 };
 
