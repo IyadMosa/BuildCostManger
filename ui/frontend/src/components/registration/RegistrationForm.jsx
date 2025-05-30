@@ -72,6 +72,13 @@ const RegistrationForm = () => {
       </div>
       {error && available !== false && <ErrorText>{error}</ErrorText>}
       <Button type="submit">Register</Button>
+      <Button
+        type="button"
+        onClick={() => navigate("/")}
+        style={{ marginTop: "10px" }}
+      >
+        Back to Login
+      </Button>
     </Container>
   );
 };
