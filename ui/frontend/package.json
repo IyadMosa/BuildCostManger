@@ -1,5 +1,5 @@
 {
-  "homepage": "/",
+  "homepage": "/rest/v1/bcm/",
   "name": "react-auth-app",
   "version": "0.1.0",
   "private": true,
