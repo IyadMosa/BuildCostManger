@@ -1,3 +1,4 @@
+// App.js
 import {
   BrowserRouter as Router,
   Link,
@@ -7,7 +8,7 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
-import { Provider, useDispatch, useSelector } from "react-redux";
+import { Provider, useDispatch } from "react-redux";
 import {
   AppBar,
   Box,
@@ -28,6 +29,7 @@ import LoginForm from "./components/registration/LoginForm";
 import RegistrationForm from "./components/registration/RegistrationForm";
 import SelectedProjectName from "./components/reusable/ProjectNameContainer";
 import React from "react";
+import useTokenWatcher from "./useTokenWatcher";
 
 // Private Route Component
 const PrivateRoute = ({ children }) => {
@@ -40,9 +42,8 @@ const TopMenu = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  if (location.pathname === "/") return null; // Hide menu on login page
-  if (location.pathname === "/projects") return null; // Hide menu on projects page
-  if (location.pathname === "/register") return null; // Hide menu on register page
+  if (["/", "/projects", "/register"].includes(location.pathname)) return null;
+
   return (
     <AppBar position="fixed">
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -53,7 +54,7 @@ const TopMenu = () => {
           </Button>
           <Button color="inherit" component={Link} to="/workers">
             Workers
-          </Button>{" "}
+          </Button>
           <Button color="inherit" component={Link} to="/shops">
             Shops
           </Button>
@@ -64,8 +65,8 @@ const TopMenu = () => {
         <Button
           color="inherit"
           onClick={() => {
-            dispatch({ type: LOGOUT }); // Dispatch logout action
-            navigate("/"); // Navigate to login page
+            dispatch({ type: LOGOUT });
+            navigate("/");
           }}
         >
           Logout
@@ -75,9 +76,11 @@ const TopMenu = () => {
   );
 };
 
-// Main App Component
-const App = () => (
-  <Provider store={store}>
+// AppContent component to use hooks
+const AppContent = () => {
+  useTokenWatcher();
+
+  return (
     <Router>
       <CssBaseline />
       <TopMenu />
@@ -116,7 +119,7 @@ const App = () => (
                 <Shops />
               </PrivateRoute>
             }
-          />{" "}
+          />
           <Route
             path="/projects"
             element={
@@ -137,6 +140,13 @@ const App = () => (
         </Routes>
       </Container>
     </Router>
+  );
+};
+
+// Main App Component
+const App = () => (
+  <Provider store={store}>
+    <AppContent />
   </Provider>
 );
 
