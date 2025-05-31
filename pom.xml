@@ -22,11 +22,11 @@
 		<developer/>
 	</developers>
 	<modules>
-		<module>core</module>
 		<module>util</module>
 		<module>database</module>
 		<module>ui</module>
 		<module>authentication</module>
+		<module>core</module>
 	</modules>
 	<scm>
 		<connection/>
