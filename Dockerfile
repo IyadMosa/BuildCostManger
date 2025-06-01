@@ -1,11 +1,11 @@
 # Use a Java runtime base image
-FROM openjdk:17-jdk-alpine
+FROM openjdk:17-jdk-slim
 
 # Set working directory
 WORKDIR /app
 
 # Copy jar file
-COPY target/*.jar app.jar
+COPY core/target/buildcostmanager-core.jar app.jar
 
 # Expose port
 EXPOSE 8080
