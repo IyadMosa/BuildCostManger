@@ -29,7 +29,7 @@ import LoginForm from "./components/registration/LoginForm";
 import RegistrationForm from "./components/registration/RegistrationForm";
 import SelectedProjectName from "./components/reusable/ProjectNameContainer";
 import React from "react";
-import useTokenWatcher from "./useTokenWatcher";
+import TokenWatcher from "./tokenWatcher";
 
 // Private Route Component
 const PrivateRoute = ({ children }) => {
@@ -78,11 +78,10 @@ const TopMenu = () => {
 
 // AppContent component to use hooks
 const AppContent = () => {
-  useTokenWatcher();
-
   return (
     <Router>
       <CssBaseline />
+      <TokenWatcher />
       <TopMenu />
       <Container sx={{ width: "100%", marginTop: "100px" }} maxWidth={false}>
         <Routes>

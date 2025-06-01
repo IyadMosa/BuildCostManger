@@ -1,11 +1,12 @@
-// src/hooks/useTokenWatcher.js
 import { useEffect } from "react";
 import { jwtDecode } from "jwt-decode";
 import { useDispatch } from "react-redux";
 import { LOGOUT } from "./actions/types";
+import { useNavigate } from "react-router-dom";
 
-const useTokenWatcher = () => {
+const TokenWatcher = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -16,17 +17,19 @@ const useTokenWatcher = () => {
           const now = Date.now() / 1000;
           if (decoded.exp < now) {
             dispatch({ type: LOGOUT });
-            window.location.href = "/";
+            navigate("/", { replace: true });
           }
         } catch (err) {
           dispatch({ type: LOGOUT });
-          window.location.href = "/";
+          navigate("/", { replace: true });
         }
       }
-    }, 10000); // Check every 10 seconds
+    }, 10000);
 
     return () => clearInterval(interval);
-  }, [dispatch]);
+  }, [dispatch, navigate]);
+
+  return null;
 };
 
-export default useTokenWatcher;
+export default TokenWatcher;
