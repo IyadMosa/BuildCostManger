@@ -56,7 +56,14 @@ public class SecurityConfig {
                                 "/logo512.png",
                                 "/static/**",
                                 "/static/js/**",
-                                "/static/css/**"
+                                "/static/css/**",
+                                "/dashboard",       //  add all frontend routes here
+                                "/register",
+                                "/shops",
+                                "/projects",
+                                "/workers",
+                                "/worker-bills/**",
+                                "/shop-bills/**"
                         ).permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()

@@ -1,5 +1,6 @@
 // App.js
 import {
+  BrowserRouter,
   BrowserRouter as Router,
   Link,
   Navigate,
@@ -79,7 +80,7 @@ const TopMenu = () => {
 // AppContent component to use hooks
 const AppContent = () => {
   return (
-    <Router>
+    <BrowserRouter basename="/rest/v1/bcm/">
       <CssBaseline />
       <TokenWatcher />
       <TopMenu />
@@ -138,7 +139,7 @@ const AppContent = () => {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Container>
-    </Router>
+    </BrowserRouter>
   );
 };
 
