@@ -23,7 +23,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtTokenProvider tokenProvider;
     private final UserService userService;
 
-    private static final String API_PREFIX = "buildcostmanger.onrender.com/rest/v1/bcm/";
+    private static final String API_PREFIX = "/rest/v1/bcm/";
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
