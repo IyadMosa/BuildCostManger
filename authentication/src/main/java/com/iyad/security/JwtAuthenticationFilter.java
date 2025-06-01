@@ -64,9 +64,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     userDetails, null, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
-        else{
-            throw new JwtException("Invalid or expired JWT token");
-        }
     }
 
     private HttpServletRequest extractProjectAndWrapRequest(HttpServletRequest request, String fullPath, String contextPath) {
