@@ -26,7 +26,11 @@ public class ProjectAccessService {
 
     public ProjectUser validateAccessAndGet() {
         UUID projectId = ProjectContext.get();
-        MyUser userDetails = (MyUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(principal instanceof String) {
+            throw new AccessDeniedException("Access denied: No user is authenticated.");
+        }
+        MyUser userDetails = (MyUser) principal;
         UUID userId = userDetails.getId();
         if (!projectUserRepository.existsByProject_IdAndUser_Id(projectId, userId)) {
             throw new AccessDeniedException("Access denied to project: " + projectId);
