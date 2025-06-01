@@ -72,6 +72,7 @@
         </dependency>
     </dependencies>
     <build>
+        <finalName>buildcostmanager-core</finalName>
         <plugins>
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
