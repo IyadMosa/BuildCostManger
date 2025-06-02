@@ -23,8 +23,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtTokenProvider tokenProvider;
     private final UserService userService;
 
-    private static final String API_PREFIX = "/rest/v1/bcm/";
-
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
@@ -39,7 +37,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String fullPath = request.getRequestURI();
         String contextPath = request.getContextPath();
 
-        if (fullPath.startsWith(API_PREFIX)) {
+        if (fullPath.contains("api")) {
             HttpServletRequest modifiedRequest = extractProjectAndWrapRequest(request, fullPath, contextPath);
             try {
                 filterChain.doFilter(modifiedRequest, response);
@@ -68,7 +66,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private HttpServletRequest extractProjectAndWrapRequest(HttpServletRequest request, String fullPath, String contextPath) {
         String remainingPath = fullPath.substring(contextPath.length()+1);
-        String[] parts = remainingPath.split("/", 2); // ['', 'rest', 'v1', 'bcm', '{projectId}', ...]
+        String[] parts = remainingPath.split("/", 2);
 
         if (parts.length == 2) {
             try {
