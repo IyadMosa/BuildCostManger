@@ -26,9 +26,12 @@ public class MaterialService {
     @Transactional
     public Material purchaseMaterial(String shopName, MaterialDTO materialDTO) throws Throwable {
         Material material = modelMapper.map(materialDTO, Material.class);
+        ProjectUser projectUser = projectAccessService.validateAccessAndGet();
         Shop shop = getShop(shopName);
         shop.setTotalMoneyAmountRequested(shop.getTotalMoneyAmountRequested() + material.getTotalCost());
         material.setShop(shop);
+        material.setProject(projectUser.getProject());
+        material.setUser(projectUser.getUser());
         return materialRepository.save(material);
     }
 
