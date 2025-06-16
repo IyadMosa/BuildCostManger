@@ -1,5 +1,14 @@
-export const BASE_URL = "/rest/v1/bcm";
 const LOGIN_PATH = "/";
+
+const hostname =
+  window.location.hostname === "localhost" ||
+  window.location.hostname === "127.0.0.1"
+    ? "localhost"
+    : window.location.hostname;
+
+const port = process.env.REACT_APP_BACKEND_PORT;
+const contextPath = process.env.REACT_APP_CONTEXT_PATH;
+export const BASE_URL = `http://${hostname}:${port}${contextPath}`;
 
 const getAuthToken = () => localStorage.getItem("token");
 const getProjectId = () => localStorage.getItem("projectId");

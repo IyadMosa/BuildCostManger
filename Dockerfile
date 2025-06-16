@@ -17,6 +17,6 @@ WORKDIR /app
 # Copy the built JAR from the builder stage
 COPY --from=builder /app/core/target/buildcostmanager-core.jar app.jar
 
-EXPOSE 8080
+EXPOSE 2025
 
 ENTRYPOINT ["java", "-jar", "app.jar", "--spring.profiles.active=prod"]

@@ -1,7 +1,6 @@
 // App.js
 import {
   BrowserRouter,
-  BrowserRouter as Router,
   Link,
   Navigate,
   Route,
