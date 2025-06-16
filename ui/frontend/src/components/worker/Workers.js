@@ -7,7 +7,13 @@ import {
 } from "../../actions/workerAction";
 import { LoadingSpinner, Modal, TableScreen } from "@iyadmosa/react-library";
 import AddWorkerForm from "./AddWorkerForm";
-import { FaDollarSign, FaFileInvoiceDollar, FaUserEdit } from "react-icons/fa";
+import {
+  FaDollarSign,
+  FaFileInvoiceDollar,
+  FaQuestionCircle,
+  FaRegPaperPlane,
+  FaUserEdit,
+} from "react-icons/fa";
 import PaymentForm from "../payment/PaymentForm";
 import { payForWorker } from "../../actions/paymentAction";
 import { useNavigate } from "react-router-dom";
@@ -86,6 +92,10 @@ const Workers = () => {
     [dispatch]
   );
 
+  const handleNewRequest = useCallback((name) => {
+    setWorkerName(name);
+    setIsModalOpen(true);
+  }, []);
   const handleSubmitEditedWorker = async () => {
     if (worker) {
       await dispatch(addWorker(worker));
@@ -121,14 +131,20 @@ const Workers = () => {
         filterable: false,
         sortable: false,
         resizable: false,
-        maxWidth: 120,
+        maxWidth: 140,
         Cell: (row) => (
-          <div style={{ display: "flex", gap: "10px" }}>
+          <div style={{ display: "flex" }}>
             <button
               onClick={() => handleEditWorker(row.original.name)}
               style={{ background: "none", border: "none", cursor: "pointer" }}
             >
               <FaUserEdit size={20} />
+            </button>
+            <button
+              onClick={() => handleNewRequest(row.original.name)}
+              style={{ background: "none", border: "none", cursor: "pointer" }}
+            >
+              <FaRegPaperPlane size={20} />
             </button>
             <button
               onClick={() => handlePaymentClick(row.original.name)}
