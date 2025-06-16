@@ -1,0 +1,20 @@
+# Build the Docker image and tag it as latest
+docker build -t iyadmosa/bcm:latest .
+
+# Push the latest image to Docker Hub
+docker push iyadmosa/bcm:latest
+
+# Pull the latest image from Docker Hub
+docker pull iyadmosa/bcm:latestdocker
+
+# Create a Docker network for the application
+docker network create bcm-net
+
+# Run the container with port mapping
+docker run -d --name bcm-1 -p 2025:2025  iyadmosa/bcm:latest
+
+# Run the container with port mapping, and network
+docker run -d --name bcm-1 --network bcm-net -p 2025:2025  iyadmosa/bcm:latest
+
+# Run a container instance with remote debugging enabled on port 5005
+docker run -d --name bcm-debug-1 --network bcm-net -p 2025:2025 -p 5005:5005  --entrypoint "" iyadmosa/bcm:latest java -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -jar /app/app.jar
