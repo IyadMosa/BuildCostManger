@@ -17,6 +17,7 @@ import {
 import PaymentForm from "../payment/PaymentForm";
 import { payForWorker } from "../../actions/paymentAction";
 import { useNavigate } from "react-router-dom";
+import NewRequestForm from "./NewRequestForm";
 
 const Workers = () => {
   const navigate = useNavigate();
@@ -55,6 +56,7 @@ const Workers = () => {
   const [workerName, setWorkerName] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
+  const [showPaymentForm, setShowPaymentForm] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -79,6 +81,7 @@ const Workers = () => {
 
   const handlePaymentClick = useCallback((name) => {
     setWorkerName(name);
+    setShowPaymentForm(true);
     setIsModalOpen(true);
   }, []);
 
@@ -94,8 +97,15 @@ const Workers = () => {
 
   const handleNewRequest = useCallback((name) => {
     setWorkerName(name);
+    setShowPaymentForm(false);
+    setPaymentData({
+      ...paymentData,
+      newRequestTotal: 0,
+      newRequestPaid: 0,
+    });
     setIsModalOpen(true);
   }, []);
+
   const handleSubmitEditedWorker = async () => {
     if (worker) {
       await dispatch(addWorker(worker));
@@ -110,6 +120,13 @@ const Workers = () => {
       await dispatch(payForWorker(workerName, paymentData));
       setWorkerName(null);
       setIsModalOpen(false);
+      setShowPaymentForm(false);
+      setPaymentData({
+        paidAt: new Date(),
+        amount: null,
+        paymentMethod: null,
+        currency: "NIS",
+      });
     }
   };
 
@@ -193,15 +210,50 @@ const Workers = () => {
       />
 
       <Modal
-        title="Payment Modal"
+        title={showPaymentForm ? "Payment Details" : "New Request"}
         isOpen={isModalOpen}
         onSubmit={handleSubmitPayment}
         onClose={() => {
           setIsModalOpen(false);
           setWorkerName(null);
+          setShowPaymentForm(false);
+          setPaymentData({
+            paidAt: new Date(),
+            amount: null,
+            paymentMethod: null,
+            currency: "NIS",
+          });
         }}
       >
-        <PaymentForm paymentData={paymentData} onChange={setPaymentData} />
+        {showPaymentForm ? (
+          <PaymentForm
+            paymentData={{ ...paymentData, amount: paymentData.amount }}
+            onChange={setPaymentData}
+            hideAmount={false}
+          />
+        ) : (
+          <>
+            <NewRequestForm
+              paymentData={paymentData}
+              onChange={setPaymentData}
+            />
+            {paymentData?.newRequestPaid > 0 && (
+              <>
+                <div style={{ margin: "20px 0", textAlign: "center" }}>
+                  <strong>Payment Details</strong>
+                </div>
+                <PaymentForm
+                  paymentData={{
+                    ...paymentData,
+                    amount: paymentData.newRequestPaid,
+                  }}
+                  onChange={setPaymentData}
+                  hideAmount={true}
+                />
+              </>
+            )}
+          </>
+        )}
       </Modal>
 
       <Modal

@@ -90,8 +90,31 @@ public class PaymentService {
 
     @Transactional
     public void payForWorker(String name, PaymentDTO dto) throws Throwable {
-        Payment payment = processPayment(dto);
         Worker worker = workerService.getWorkerByName(name);
+
+        // Handle new request functionality
+        if (dto.getNewRequestTotal() != null && dto.getNewRequestTotal() > 0) {
+            worker.setTotalMoneyAmountRequested(
+                worker.getTotalMoneyAmountRequested() + dto.getNewRequestTotal()
+            );
+            // Optionally, pay now for the new request
+            if (dto.getNewRequestPaid() != null && dto.getNewRequestPaid() > 0) {
+                Payment payment = processPayment(dto);
+                payment.setAmount(dto.getNewRequestPaid());
+                worker.setTotalMoneyAmountPaid(worker.getTotalMoneyAmountPaid() + dto.getNewRequestPaid());
+                payment.setWorker(worker);
+                ProjectUser projectUser = projectAccessService.validateAccessAndGet();
+                payment.setProject(projectUser.getProject());
+                payment.setUser(projectUser.getUser());
+                paymentRepository.save(payment);
+            }
+            // Save worker after updating requested amount
+            workerService.saveWorker(worker);
+            return;
+        }
+
+        // Normal payment flow
+        Payment payment = processPayment(dto);
         worker.setTotalMoneyAmountPaid(worker.getTotalMoneyAmountPaid() + dto.getAmount());
         payment.setWorker(worker);
         ProjectUser projectUser = projectAccessService.validateAccessAndGet();

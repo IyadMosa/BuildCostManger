@@ -55,4 +55,8 @@ public class WorkerService {
     public Set<String> getWorkerSpecialities() {
         return Arrays.stream(WorkerSpecialty.values()).map(specialty -> specialty.getName("en")).collect(Collectors.toSet());
     }
+
+    public void saveWorker(Worker worker) {
+        workerRepository.save(worker);
+    }
 }

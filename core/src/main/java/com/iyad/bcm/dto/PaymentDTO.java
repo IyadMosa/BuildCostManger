@@ -28,7 +28,7 @@ public class PaymentDTO {
     private LocalDate transactionDate; // Credit Card-specific
     private String bankAccount; // Bank Transfer-specific
     private String bankBranch; // Bank Transfer-specific
-    private Double newRequestTotal; // For new requests
-    private Double newRequestPaid; // For new requests
+    private Double newRequestTotal; // For new requests (amount to add to requested)
+    private Double newRequestPaid; // For new requests (amount to pay now, optional)
 
 }
