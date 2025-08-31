@@ -1,0 +1,17 @@
+services:
+  bcm-backend:
+    image: iyadmosa/bcm-backend-image:latest
+    container_name: bcm-backend
+    ports:
+      - "2025:2025"
+      # Uncomment the next line to enable remote debugging
+      # - "5005:5005"
+    networks:
+      - bcm-net
+    # Uncomment the next lines to enable remote debugging
+    # entrypoint: ["java", "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005", "-jar", "/app/app.jar"]
+    restart: unless-stopped
+
+networks:
+  bcm-net:
+    driver: bridge

@@ -24,7 +24,6 @@
 	<modules>
 		<module>util</module>
 		<module>database</module>
-		<module>ui</module>
 		<module>authentication</module>
 		<module>core</module>
 	</modules>
